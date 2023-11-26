@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jack.LabSystem.mapper.RecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jack.LabSystem.model.entity.Record">
+        <id column="Researcherid" property="researcherid" />
+        <id column="Projectid" property="projectid" />
+        <result column="participationdate" property="participationdate" />
+        <result column="workload" property="workload" />
+        <result column="allocatedfund" property="allocatedfund" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        Researcherid, Projectid, participationdate, workload, allocatedfund
+    </sql>
+
+</mapper>

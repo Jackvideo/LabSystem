@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jack.LabSystem.mapper.ResearcherMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jack.LabSystem.model.entity.Researcher">
+        <id column="Researcherid" property="researcherid" />
+        <result column="Labid" property="labid" />
+        <result column="researchername" property="researchername" />
+        <result column="gender" property="gender" />
+        <result column="level" property="level" />
+        <result column="age" property="age" />
+        <result column="researcharea" property="researcharea" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        Researcherid, Labid, researchername, gender, level, age, researcharea
+    </sql>
+
+</mapper>

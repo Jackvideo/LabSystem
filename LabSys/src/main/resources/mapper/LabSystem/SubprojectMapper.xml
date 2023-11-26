@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jack.LabSystem.mapper.SubprojectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jack.LabSystem.model.entity.Subproject">
+        <id column="Subprojectid" property="subprojectid" />
+        <result column="Projectid" property="projectid" />
+        <result column="Leaderid" property="leaderid" />
+        <result column="deadline" property="deadline" />
+        <result column="budget" property="budget" />
+        <result column="technicalindex" property="technicalindex" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        Projectid, Subprojectid, Leaderid, deadline, budget, technicalindex
+    </sql>
+
+</mapper>
