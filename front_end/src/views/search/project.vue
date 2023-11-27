@@ -18,7 +18,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="projectList" stripe style="width: 100%">
+            <el-table :data="projectList" stripe style="width: 100%" border :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="50">
                     <template v-slot="scope">
                         {{ (project.pageNo - 1) * project.pageSize + scope.$index + 1 }}
@@ -44,6 +45,8 @@
                         <el-button @click="openEdit(scope.row.projectid)" type="primary" icon="el-icon-edit"
                             circle></el-button>
                         <el-button @click="deleteProjectorNot(scope.row)" type="danger" icon="el-icon-delete"
+                            circle></el-button>
+                        <el-button @click="openSubEdit(scope.row.projectid)" icon="el-icon-more" type="info"
                             circle></el-button>
 
                     </template>
@@ -86,13 +89,27 @@
                 <el-button type="primary" @click="saveProject">确 定</el-button>
             </div>
         </el-dialog>
+
+        <!-- 子项目对话框 -->
+        <el-dialog title="子项目" :visible.sync="spVisible" width="80%">
+            <!-- 引入子组件 -->
+            <Subproject :theprojectid='pid'></Subproject>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="spVisible = false">取 消</el-button>
+                <el-button type="primary" @click="spVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 存在问题，theprojectid不刷新，只能获取第一次点击的子项目值 -->
     </div>
 </template>
 
 <script>
 
 import CommonApi from '@/api/back_end'
+import Subproject from './subproject.vue'
 export default {
+    components: { Subproject },
     data() {
         return {
             title: "",
@@ -113,13 +130,15 @@ export default {
                     { required: true, message: '请输入项目经费', trigger: 'blur' },
                 ]
             },
+            pid: 1,
             dialogFormVisible: false,
+            spVisible: false,
             total: 0,
             project: {
                 pageNo: 1,
                 pageSize: 10
             },
-            projectList: []
+            projectList: [],
         }
     },
     methods: {
@@ -152,6 +171,12 @@ export default {
 
             }
             this.dialogFormVisible = true;
+        },
+        openSubEdit(id) {
+            //打开子项目对话框
+            //查询数据
+            this.pid = id;
+            this.spVisible = true;
         },
         clearForm() {
             //清除缓存验证

@@ -1,5 +1,6 @@
 package com.jack.LabSystem.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -27,7 +28,7 @@ public class Subproject implements Serializable {
 @TableField("Projectid")
 private Integer projectid;
 
-@TableField("Subprojectid")
+@TableId(value = "Subprojectid",type = IdType.AUTO)
 private Integer subprojectid;
 
 @TableField("Leaderid")

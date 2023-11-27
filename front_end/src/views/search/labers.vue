@@ -19,7 +19,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="laberList" stripe style="width: 100%">
+            <el-table :data="laberList" border stripe style="width: 100%" :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="100">
                     <template v-slot="scope">
                         {{ (researcher.pageNo - 1) * researcher.pageSize + scope.$index + 1 }}

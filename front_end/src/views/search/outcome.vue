@@ -21,7 +21,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="outcomeList" stripe style="width: 100%">
+            <el-table :data="outcomeList" border stripe style="width: 100%" :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="100">
                     <template v-slot="scope">
                         {{ (outcome.pageNo - 1) * outcome.pageSize + scope.$index + 1 }}

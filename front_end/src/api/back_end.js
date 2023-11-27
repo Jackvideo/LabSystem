@@ -509,5 +509,63 @@ export default {
             url: `/LabSystem/contact/deleteid=${id}`,
             method: 'delete'
         });
+    },
+
+    //Subproject
+    //按参数获取对象
+    getSubprojectList(subproject) {
+        return request({
+            url: '/LabSystem/subproject/list',
+            method: 'get',
+            params: {
+                pageNo: subproject.pageNo,
+                pageSize: subproject.pageSize,
+                projectid: subproject.projectid,
+                subprojectid: subproject.subprojectid,
+                leaderid: subproject.leaderid,
+                deadline: subproject.deadline,
+                budget: subproject.budget,
+                technicalindex: subproject.technicalindex
+            }
+        });
+    },
+    //新增对象
+    addSubproject(subproject) {
+        return request({
+            url: '/LabSystem/subproject',
+            method: 'post',
+            data: subproject
+        });
+    },
+    //修改对象
+    updateSubproject(subproject) {
+        return request({
+            url: '/LabSystem/subproject/update',
+            method: 'put',
+            data: subproject
+        })
+    },
+    //逻辑判断是新增还是修改
+    saveSubproject(subproject) {
+        if (subproject.spaceid == null && subproject.spaceid == undefined) {
+            return this.addSubproject(subproject);
+        } else {
+            return this.updateSubproject(subproject);
+        }
+    },
+    //根据id查询
+    findOneSubproject(id) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/subproject/getid=${id}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deleteSubproject(id) {
+        return request({
+            url: `/LabSystem/subproject/deleteid=${id}`,
+            method: 'delete'
+        });
     }
 }

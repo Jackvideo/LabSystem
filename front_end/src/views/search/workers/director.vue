@@ -16,7 +16,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="directorList" stripe style="width: 100%">
+            <el-table :data="directorList" stripe style="width: 100%" border :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="100">
                     <template v-slot="scope">
                         {{ (director.pageNo - 1) * director.pageSize + scope.$index + 1 }}

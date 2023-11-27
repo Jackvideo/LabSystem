@@ -17,7 +17,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="officespaceList" stripe style="width: 100%">
+            <el-table :data="officespaceList" stripe style="width: 100%" border :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="100">
                     <template v-slot="scope">
                         {{ (officespace.pageNo - 1) * officespace.pageSize + scope.$index + 1 }}

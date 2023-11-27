@@ -15,7 +15,8 @@
 
         <!-- 结果列表 -->
         <el-card id="result">
-            <el-table :data="secretaryList" stripe style="width: 100%">
+            <el-table :data="secretaryList" stripe style="width: 100%" border :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }">
                 <el-table-column label="#" width="150">
                     <template v-slot="scope">
                         {{ (secretary.pageNo - 1) * secretary.pageSize + scope.$index + 1 }}
