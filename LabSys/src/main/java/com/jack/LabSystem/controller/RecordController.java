@@ -1,5 +1,7 @@
 package com.jack.LabSystem.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jack.LabSystem.model.entity.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +9,9 @@ import com.jack.LabSystem.util.ResultUtil;
 
 import com.jack.LabSystem.service.RecordService;
 import com.jack.LabSystem.model.entity.Record;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -18,41 +23,51 @@ import com.jack.LabSystem.model.entity.Record;
  * @since 2023-11-12 10:46
  */
 @RestController
-@RequestMapping("/LabSystem/record")
+@RequestMapping("/RecordSystem/record")
 public class RecordController {
 
     @Autowired
     private RecordService recordService;
 
-    //编辑或更新
-    @PostMapping("/saveOrUpdate")
-    public ResultUtil save(@RequestBody Record record) {
-        return ResultUtil.success(recordService.saveOrUpdate(record));
-        }
+    @GetMapping("/list")
+    public ResultUtil<Map<String,Object>> getRecordList(@RequestParam(value = "Researcherid",required = false) Integer rid,
+                                                     @RequestParam(value = "Projectid",required = false) Integer pid,
+                                                     @RequestParam(value = "participationdate",required = false) String date,
+                                                     @RequestParam(value = "workload",required = false) String workload,
+                                                     @RequestParam(value = "allocatedfund", required = false) String fund,
+                                                     @RequestParam("pageNo") Long pageNo,
+                                                     @RequestParam("pageSize") Long pageSize){
+        LambdaQueryWrapper<Record> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(rid!=null ,Record::getResearcherid,rid);
+        wrapper.eq(pid!=null ,Record::getProjectid,pid);
+        wrapper.eq(date!=null&&date!="",Record::getParticipationdate,date);
+        wrapper.eq(workload!=null&&workload!="",Record::getWorkload,workload);
+        wrapper.eq(fund!=null&&fund!="",Record::getAllocatedfund,fund);
+        Page<Record> page = new Page<>(pageNo,pageSize);
+        recordService.page(page,wrapper);
+        Map<String,Object> data=new HashMap<>();
+        data.put("total",page.getTotal());
+        data.put("rows",page.getRecords());
+        return ResultUtil.success(data);
+    }
 
-    //根据id删除
+    //新增接口
+    @PostMapping
+    public ResultUtil addRecord(@RequestBody Record recorder){
+            recordService.save(recorder);
+            return ResultUtil.success("新增工作记录成功");
+    }
+    //修改接口
+    @PutMapping("/update")
+    public ResultUtil updateRecord(@RequestBody Record recorder){
+        recordService.updateById(recorder);
+        return ResultUtil.success("修改工作记录成功");
+    }
+    //直接物理删除
     @DeleteMapping("/deleteid={id}")
-    public ResultUtil delete(@PathVariable Integer id) {
-        return ResultUtil.success(recordService.removeById(id));
-        }
-
-    //查询全部
-    @GetMapping("/getAll")
-    public ResultUtil findAll() {
-        return ResultUtil.success(recordService.list());
-        }
-
-    //根据id查询
-    @GetMapping("/getid={id}")
-    public ResultUtil findOne(@PathVariable Integer id) {
-        return ResultUtil.success(recordService.list());
-        }
-
-    //分页查询
-    @GetMapping("/page")
-    public ResultUtil findPage(@RequestParam Integer pageNum,@RequestParam Integer pageSize){
-        return ResultUtil.success(recordService.page(new Page<>(pageNum, pageSize)));
-        }
-
+    public ResultUtil deleteRecord(@PathVariable("id") Integer id){
+        recordService.removeById(id);
+        return ResultUtil.success("删除工作记录成功");
+    }
 }
 

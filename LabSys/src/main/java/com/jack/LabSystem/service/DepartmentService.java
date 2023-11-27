@@ -1,6 +1,6 @@
 package com.jack.LabSystem.service;
 
-import com.jack.LabSystem.model.entity.Qualitier;
+import com.jack.LabSystem.model.entity.Department;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author Jackvideo
- * @since 2023-11-12 10:50
+ * @since 2023-11-27 23:27
  */
-public interface QualitierService extends IService<Qualitier> {
+public interface DepartmentService extends IService<Department> {
 
 }

@@ -1,5 +1,6 @@
 package com.jack.LabSystem.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -14,20 +15,23 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jackvideo
- * @since 2023-11-12 10:50
+ * @since 2023-11-27 23:27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("qualitier")
-public class Qualitier implements Serializable {
+@TableName("department")
+public class Department implements Serializable {
 
 
- @TableId("Qualitierid")
-private Integer qualitierid;
+@TableField("type")
+private String type;
 
-@TableField("qualitiername")
-private String qualitiername;
+ @TableId(value = "Departmentid" ,type = IdType.AUTO)
+private Integer departmentid;
+
+@TableField("departmentname")
+private String departmentname;
 
 @TableField("address")
 private String address;
