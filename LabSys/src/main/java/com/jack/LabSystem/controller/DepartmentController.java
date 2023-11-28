@@ -35,6 +35,7 @@ public class DepartmentController {
                                                             @RequestParam(value = "leaderid",required = false) Integer leaderid,
                                                           @RequestParam(value = "departmentname",required = false) String name,
                                                           @RequestParam(value = "address",required = false) String address,
+                                                            @RequestParam(value = "type",required = false) String type,
                                                           @RequestParam("pageNo") Long pageNo,
                                                           @RequestParam("pageSize") Long pageSize){
         LambdaQueryWrapper<Department> wrapper = new LambdaQueryWrapper<>();
@@ -42,6 +43,7 @@ public class DepartmentController {
         wrapper.eq(leaderid!=null ,Department::getLeaderid,leaderid);
         wrapper.eq(name!=null&&name!="",Department::getDepartmentname,name);
         wrapper.eq(address!=null&&address!="",Department::getAddress,address);
+        wrapper.eq(type!=null&&type!="",Department::getType,type);
         Page<Department> page = new Page<>(pageNo,pageSize);
         departmentService.page(page,wrapper);
         Map<String,Object> data=new HashMap<>();

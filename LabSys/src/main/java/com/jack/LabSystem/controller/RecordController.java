@@ -1,6 +1,8 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jack.LabSystem.model.entity.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,15 +25,24 @@ import java.util.Map;
  * @since 2023-11-12 10:46
  */
 @RestController
-@RequestMapping("/RecordSystem/record")
+@RequestMapping("/LabSystem/record")
 public class RecordController {
 
     @Autowired
     private RecordService recordService;
 
+    //根据id查询
+    @GetMapping("/getpid={pid}rid={rid}")
+    public ResultUtil findOne(@PathVariable("pid") Integer pid,@PathVariable("rid") Integer rid) {
+        QueryWrapper<Record> wrapper=new QueryWrapper<>();
+        wrapper.eq("projectid",pid);
+        wrapper.eq("researcherid",rid);
+        return ResultUtil.success(recordService.getOne(wrapper));
+    }
+
     @GetMapping("/list")
-    public ResultUtil<Map<String,Object>> getRecordList(@RequestParam(value = "Researcherid",required = false) Integer rid,
-                                                     @RequestParam(value = "Projectid",required = false) Integer pid,
+    public ResultUtil<Map<String,Object>> getRecordList(@RequestParam(value = "researcherid",required = false) Integer rid,
+                                                     @RequestParam(value = "projectid",required = false) Integer pid,
                                                      @RequestParam(value = "participationdate",required = false) String date,
                                                      @RequestParam(value = "workload",required = false) String workload,
                                                      @RequestParam(value = "allocatedfund", required = false) String fund,
@@ -60,13 +71,19 @@ public class RecordController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateRecord(@RequestBody Record recorder){
-        recordService.updateById(recorder);
+        QueryWrapper<Record> wrapper=new QueryWrapper<>();
+        wrapper.eq("projectid",recorder.getProjectid());
+        wrapper.eq("researcherid",recorder.getResearcherid());
+        recordService.update(recorder,wrapper);
         return ResultUtil.success("修改工作记录成功");
     }
     //直接物理删除
-    @DeleteMapping("/deleteid={id}")
-    public ResultUtil deleteRecord(@PathVariable("id") Integer id){
-        recordService.removeById(id);
+    @DeleteMapping("/deletepid={pid}rid={rid}")
+    public ResultUtil deleteRecord(@PathVariable("pid") Integer pid,@PathVariable("rid") Integer rid){
+        QueryWrapper<Record> wrapper=new QueryWrapper<>();
+        wrapper.eq("projectid",pid);
+        wrapper.eq("researcherid",rid);
+        recordService.remove(wrapper);
         return ResultUtil.success("删除工作记录成功");
     }
 }

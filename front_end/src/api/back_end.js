@@ -567,5 +567,119 @@ export default {
             url: `/LabSystem/subproject/deleteid=${id}`,
             method: 'delete'
         });
-    }
+    },
+
+    //Record
+    //按参数获取对象
+    getRecordList(record) {
+        return request({
+            url: '/LabSystem/record/list',
+            method: 'get',
+            params: {
+                pageNo: record.pageNo,
+                pageSize: record.pageSize,
+                projectid: record.projectid,
+                researcherid: record.researcherid,
+                participationdate: record.participationdate,
+                workload: record.workload,
+                allocatedfund: record.allocatedfund
+            }
+        });
+    },
+    //新增对象
+    addRecord(record) {
+        return request({
+            url: '/LabSystem/record',
+            method: 'post',
+            data: record
+        });
+    },
+    //修改对象
+    updateRecord(record) {
+        return request({
+            url: '/LabSystem/record/update',
+            method: 'put',
+            data: record
+        })
+    },
+    //逻辑判断是新增还是修改
+    saveRecord(record) {
+        if (record.recordid == null && record.recordid == undefined) {
+            return this.addRecord(record);
+        } else {
+            return this.updateRecord(record);
+        }
+    },
+    //根据id查询
+    findOneRecord(id) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/record//getid=${id}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deleteRecord(id) {
+        return request({
+            url: `/LabSystem/record/deleteid=${id}`,
+            method: 'delete'
+        });
+    },
+
+    //Department
+    //按参数获取对象
+    getDepartmentList(department) {
+        return request({
+            url: '/LabSystem/department/list',
+            method: 'get',
+            params: {
+                pageNo: department.pageNo,
+                pageSize: department.pageSize,
+                departmentid: department.departmentid,
+                leaderid: department.leaderid,
+                departmentname: department.departmentname,
+                address: department.address,
+                type: department.type
+            }
+        });
+    },
+    //新增对象
+    addDepartment(department) {
+        return request({
+            url: '/LabSystem/department',
+            method: 'post',
+            data: department
+        });
+    },
+    //修改对象
+    updateDepartment(department) {
+        return request({
+            url: '/LabSystem/department/update',
+            method: 'put',
+            data: department
+        })
+    },
+    //逻辑判断是新增还是修改
+    saveDepartment(department) {
+        if (department.departmentid == null && department.departmentid == undefined) {
+            return this.addDepartment(department);
+        } else {
+            return this.updateDepartment(department);
+        }
+    },
+    //根据id查询
+    findOneDepartment(id) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/department//getpid=${pid}rid=${rid}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deleteDepartment(id) {
+        return request({
+            url: `/LabSystem/department/deletepid=${pid}rid=${rid}`,
+            method: 'delete'
+        });
+    },
 }

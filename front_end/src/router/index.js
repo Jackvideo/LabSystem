@@ -84,6 +84,12 @@ export const constantRoutes = [
         meta: { title: '研究人员', icon: 'el-icon-user' }
       },
       {
+        path: 'worker',
+        name: 'Worker',
+        component: () => import('@/views/search/worker'),
+        meta: { title: '工作人员', icon: 'el-icon-user-solid' }
+      },
+      {
         path: 'project',
         name: 'Project',
         component: () => import('@/views/search/project'),
@@ -93,13 +99,25 @@ export const constantRoutes = [
         path: 'outcome',
         name: 'Outcome',
         component: () => import('@/views/search/outcome'),
-        meta: { title: '科研成果', icon: 'el-icon-star-off' }
+        meta: { title: '科研成果', icon: 'el-icon-star-off' },
       },
       {
-        path: 'worker',
-        name: 'Worker',
-        component: () => import('@/views/search/worker'),
-        meta: { title: '工作人员', icon: 'el-icon-user-solid' }
+        path: 'contributor',
+        name: 'Contributor',
+        component: () => import('@/views/search/contributor'),
+        meta: { title: '贡献榜单', icon: 'el-icon-user-solid' }
+      },
+      {
+        path: 'record',
+        name: 'Record',
+        component: () => import('@/views/search/record'),
+        meta: { title: '研究人员参与记录', icon: 'el-icon-notebook-1' }
+      },
+      {
+        path: 'department',
+        name: 'Department',
+        component: () => import('@/views/search/department'),
+        meta: { title: '三方单位', icon: 'el-icon-menu' }
       }
     ]
   },
