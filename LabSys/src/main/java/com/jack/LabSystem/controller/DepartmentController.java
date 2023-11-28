@@ -1,7 +1,10 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Department;
+import com.jack.LabSystem.model.entity.Leader;
+import com.jack.LabSystem.service.LeaderService;
 import com.jack.LabSystem.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,6 +32,15 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
+    @Autowired
+    private LeaderService leaderService;
+
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(departmentService.getById(id));
+    }
+
     //查询全部
     @GetMapping("/list")
     public ResultUtil<Map<String,Object>> getDepartmentList(@RequestParam(value = "departmentid",required = false) Integer departmentid,
@@ -54,12 +66,20 @@ public class DepartmentController {
     //新增接口
     @PostMapping
     public ResultUtil addDepartment(@RequestBody Department newDepartment){
+        QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
+        leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
+        if(leaderService.getOne(leaderQueryWrapper)==null)
+            return ResultUtil.fail("联系人不存在！");
         departmentService.save(newDepartment);
         return ResultUtil.success("新增单位成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateDepartment(@RequestBody Department newDepartment){
+        QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
+        leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
+        if(leaderService.getOne(leaderQueryWrapper)==null)
+            return ResultUtil.fail("联系人不存在！");
         departmentService.updateById(newDepartment);
         return ResultUtil.success("修改单位成功");
     }

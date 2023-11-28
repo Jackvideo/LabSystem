@@ -36,8 +36,8 @@
                 </el-table-column>
                 <el-table-column label="  操作" width="200">
                     <template v-slot="scope">
-                        <el-button @click="openEdit(scope.row.recordid)" type="primary" icon="el-icon-edit"
-                            circle></el-button>
+                        <el-button @click="openEdit(scope.row.projectid, scope.row.researcherid)" type="primary"
+                            icon="el-icon-edit" circle></el-button>
                         <el-button @click="deleteRecordorNot(scope.row)" type="danger" icon="el-icon-delete"
                             circle></el-button>
 
@@ -54,8 +54,8 @@
         <!-- 新增对象对话框 -->
         <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="recordForm" ref="recordFormRef" :rules="rules">
-                <el-form-item label="项目ID" prop="recordid" :label-width="formLabelWidth">
-                    <el-input v-model="recordForm.recordid" autocomplete="off"></el-input>
+                <el-form-item label="项目ID" prop="projectid" :label-width="formLabelWidth">
+                    <el-input v-model="recordForm.projectid" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="研究人员ID" prop="researcherid" :label-width="formLabelWidth">
                     <el-input v-model="recordForm.researcherid" autocomplete="off"></el-input>
@@ -126,14 +126,14 @@ export default {
                 this.total = response.data.total;
             });
         },
-        openEdit(id) {
+        openEdit(projectid, researcherid) {
             //打开对话框
-            if (id == null)
+            if (projectid == null && researcherid == null)
                 this.title = "新增参与记录";
             else {
                 this.title = "修改记录信息";
                 //查询数据
-                CommonApi.findOneRecord(id).then(response => {
+                CommonApi.findOneRecord(projectid, researcherid).then(response => {
                     this.recordForm = response.data;
                 });
 
@@ -173,7 +173,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                CommonApi.deleteRecord(Record.recordid).then(response => {
+                CommonApi.deleteRecord(Record.projectid, Record.researcherid).then(response => {
                     this.$message({
                         type: 'success',
                         message: '删除成功!'

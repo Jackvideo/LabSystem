@@ -2,6 +2,7 @@ package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Outcome;
+import com.jack.LabSystem.service.LeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private LeaderService leaderService;
 
     //查询全部
     @GetMapping("/getAll")
@@ -76,15 +80,27 @@ public class ProjectController {
     //新增接口
     @PostMapping
     public ResultUtil addProject(@RequestBody Project newProject){
+        //外键约束
+        if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
+            return ResultUtil.fail("负责人不存在！");
+        //重复约束
         if(projectService.findByName(newProject.getProjectname())==null) {
+            return ResultUtil.fail("该项目已存在");
+        }
             projectService.save(newProject);
             return ResultUtil.success("新增项目成功");
-        }else
-            return ResultUtil.fail("该项目已存在");
+
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateProject(@RequestBody Project newProject){
+        //外键约束
+        if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
+            return ResultUtil.fail("负责人不存在！");
+        //重复约束
+        if(projectService.findByName(newProject.getProjectname())==null) {
+            return ResultUtil.fail("该项目已存在");
+        }
         projectService.updateById(newProject);
         return ResultUtil.success("修改项目成功");
     }

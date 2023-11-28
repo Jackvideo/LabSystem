@@ -3,7 +3,10 @@ package com.jack.LabSystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.jack.LabSystem.model.entity.Project;
 import com.jack.LabSystem.model.entity.Record;
+import com.jack.LabSystem.service.ProjectService;
+import com.jack.LabSystem.service.ResearcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +33,13 @@ public class RecordController {
 
     @Autowired
     private RecordService recordService;
+    @Autowired
+    private ResearcherService researcherService;
+    @Autowired
+    private ProjectService projectService;
 
     //根据id查询
-    @GetMapping("/getpid={pid}rid={rid}")
+    @GetMapping("/getpid={pid}&rid={rid}")
     public ResultUtil findOne(@PathVariable("pid") Integer pid,@PathVariable("rid") Integer rid) {
         QueryWrapper<Record> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",pid);
@@ -65,12 +72,18 @@ public class RecordController {
     //新增接口
     @PostMapping
     public ResultUtil addRecord(@RequestBody Record recorder){
+        //外键约束
+        if(researcherService.getById(recorder.getResearcherid())==null||projectService.getById(recorder.getProjectid())==null)
+            return  ResultUtil.fail("信息不存在！违反外键约束");
             recordService.save(recorder);
             return ResultUtil.success("新增工作记录成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateRecord(@RequestBody Record recorder){
+        //外键约束
+        if(researcherService.getById(recorder.getResearcherid())==null||projectService.getById(recorder.getProjectid())==null)
+            return  ResultUtil.fail("信息不存在！违反外键约束");
         QueryWrapper<Record> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",recorder.getProjectid());
         wrapper.eq("researcherid",recorder.getResearcherid());
@@ -78,7 +91,7 @@ public class RecordController {
         return ResultUtil.success("修改工作记录成功");
     }
     //直接物理删除
-    @DeleteMapping("/deletepid={pid}rid={rid}")
+    @DeleteMapping("/deletepid={pid}&rid={rid}")
     public ResultUtil deleteRecord(@PathVariable("pid") Integer pid,@PathVariable("rid") Integer rid){
         QueryWrapper<Record> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",pid);

@@ -29,6 +29,12 @@ public class DirectorController {
     @Autowired
     private DirectorService directorService;
 
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(directorService.getById(id));
+    }
+
     //查询全部
     @GetMapping("/list")
     public ResultUtil<Map<String,Object>> getDirectorList(@RequestParam(value = "directorid",required = false) Integer directorid,

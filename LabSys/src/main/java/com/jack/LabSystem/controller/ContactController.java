@@ -28,6 +28,13 @@ public class ContactController {
 
     @Autowired
     private ContactService contactService;
+
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(contactService.getById(id));
+    }
+
     //查询全部
     @GetMapping("/list")
     public ResultUtil<Map<String,Object>> getContactList(@RequestParam(value = "contactid",required = false) Integer contactid,

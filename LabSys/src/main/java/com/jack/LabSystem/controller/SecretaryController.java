@@ -29,6 +29,12 @@ public class SecretaryController {
     @Autowired
     private SecretaryService secretaryService;
 
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(secretaryService.getById(id));
+    }
+
     //查询全部
     @GetMapping("/list")
     public ResultUtil<Map<String,Object>> getSecretaryList(@RequestParam(value = "secretaryid",required = false) Integer secretaryid,

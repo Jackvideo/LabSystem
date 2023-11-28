@@ -1,7 +1,10 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jack.LabSystem.model.entity.Project;
 import com.jack.LabSystem.model.entity.Researchlab;
+import com.jack.LabSystem.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,9 @@ public class OutcomeController {
 
     @Autowired
     private OutcomeService outcomeService;
+
+    @Autowired
+    private ProjectService projectService;
 
     //查询全部
     @GetMapping("/getAll")
@@ -73,15 +79,27 @@ public class OutcomeController {
     //新增接口
     @PostMapping
     public ResultUtil addOutcome(@RequestBody Outcome newOutcome){
-        if(outcomeService.findByName(newOutcome.getOutcomename())==null) {
-            outcomeService.save(newOutcome);
-            return ResultUtil.success("新增项目结果成功");
-        }else
+        //外键约束，检查新增结果项目是否存在
+        if(projectService.getById(newOutcome.getProjectid())==null)
+            return ResultUtil.fail("项目不存在！");
+        //重复约束，检查是否已存在项目结果
+        if(outcomeService.findByName(newOutcome.getOutcomename())!=null) {
             return ResultUtil.fail("项目结果已存在");
+        }
+        outcomeService.save(newOutcome);
+        return ResultUtil.success("新增项目结果成功");
+
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateOutcome(@RequestBody Outcome newOutcome){
+        //外键约束，检查新增结果项目是否存在
+        if(projectService.getById(newOutcome.getProjectid())==null)
+            return ResultUtil.fail("项目不存在！");
+        //重复约束，检查是否已存在项目结果
+        if(outcomeService.findByName(newOutcome.getOutcomename())!=null) {
+            return ResultUtil.fail("项目结果已存在");
+        }
         outcomeService.updateById(newOutcome);
         return ResultUtil.success("修改项目结果成功");
     }

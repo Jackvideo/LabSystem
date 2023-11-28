@@ -2,6 +2,7 @@ package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Researchlab;
+import com.jack.LabSystem.service.ResearchlabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class ResearcherController {
     @Autowired
     private ResearcherService researcherService;
 
+    @Autowired
+    private ResearchlabService researchlabService;
 
     //查询全部
     @GetMapping("/getAll")
@@ -78,6 +81,9 @@ public class ResearcherController {
     //新增接口
     @PostMapping
     public ResultUtil addLab(@RequestBody Researcher laber){
+        //外键约束，检查新增研究室是否存在
+        if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
+            return ResultUtil.fail("研究室不存在！");
         if(researcherService.findByName(laber.getResearchername())==null) {
             researcherService.save(laber);
             return ResultUtil.success("新增人员成功");
@@ -87,6 +93,9 @@ public class ResearcherController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateLab(@RequestBody Researcher laber){
+        //外键约束，检查新增研究室是否存在
+        if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
+            return ResultUtil.fail("研究室不存在！");
         researcherService.updateById(laber);
         return ResultUtil.success("修改人员成功");
     }

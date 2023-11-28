@@ -105,7 +105,7 @@ export const constantRoutes = [
         path: 'contributor',
         name: 'Contributor',
         component: () => import('@/views/search/contributor'),
-        meta: { title: '贡献榜单', icon: 'el-icon-user-solid' }
+        meta: { title: '贡献记录', icon: 'el-icon-user-solid' }
       },
       {
         path: 'record',
@@ -118,6 +118,12 @@ export const constantRoutes = [
         name: 'Department',
         component: () => import('@/views/search/department'),
         meta: { title: '三方单位', icon: 'el-icon-menu' }
+      },
+      {
+        path: 'contactrelation',
+        name: 'Contactrelation',
+        component: () => import('@/views/search/contactrelation'),
+        meta: { title: '联系人记录', icon: 'el-icon-menu' }
       }
     ]
   },

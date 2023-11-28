@@ -29,7 +29,13 @@ public class LeaderController {
 
     @Autowired
     private LeaderService leaderService;
-    
+
+
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(leaderService.getById(id));
+    }
 
     //查询全部
     @GetMapping("/list")

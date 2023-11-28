@@ -611,17 +611,17 @@ export default {
         }
     },
     //根据id查询
-    findOneRecord(id) {
+    findOneRecord(pid, rid) {
         return request({
             //使用``能包含${}变量
-            url: `/LabSystem/record//getid=${id}`,
+            url: `/LabSystem/record/getpid=${pid}&rid=${rid}`,
             method: 'get'
         });
     },
     //删除对象
-    deleteRecord(id) {
+    deleteRecord(pid, rid) {
         return request({
-            url: `/LabSystem/record/deleteid=${id}`,
+            url: `/LabSystem/record/deletepid=${pid}&rid=${rid}`,
             method: 'delete'
         });
     },
@@ -671,15 +671,125 @@ export default {
     findOneDepartment(id) {
         return request({
             //使用``能包含${}变量
-            url: `/LabSystem/department//getpid=${pid}rid=${rid}`,
+            url: `/LabSystem/department/getid=${id}`,
             method: 'get'
         });
     },
     //删除对象
     deleteDepartment(id) {
         return request({
-            url: `/LabSystem/department/deletepid=${pid}rid=${rid}`,
+            url: `/LabSystem/department/deleteid=${id}`,
             method: 'delete'
         });
     },
+
+    //Contributor
+    //按参数获取对象
+    getContributorList(contributor) {
+        return request({
+            url: '/LabSystem/contributor/list',
+            method: 'get',
+            params: {
+                pageNo: contributor.pageNo,
+                pageSize: contributor.pageSize,
+                outcomeid: contributor.outcomeid,
+                researcherid: contributor.researcherid,
+                ranks: contributor.rank
+            }
+        });
+    },
+    //新增对象
+    addContributor(contributor) {
+        return request({
+            url: '/LabSystem/contributor',
+            method: 'post',
+            data: contributor
+        });
+    },
+    //修改对象
+    updateContributor(contributor) {
+        return request({
+            url: '/LabSystem/contributor/update',
+            method: 'put',
+            data: contributor
+        })
+    },
+    //逻辑判断是新增还是修改
+    saveContributor(contributor) {
+        if (contributor.contributorid == null && contributor.contributorid == undefined) {
+            return this.addContributor(contributor);
+        } else {
+            return this.updateContributor(contributor);
+        }
+    },
+    //根据id查询
+    findOneContributor(oid, rid) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/contributor/getoid=${oid}&rid=${rid}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deleteContributor(oid, rid) {
+        return request({
+            url: `/LabSystem/contributor/deleteoid=${oid}&rid=${rid}`,
+            method: 'delete'
+        });
+    },
+
+    //ContactRelation
+    //按参数获取对象
+    getContactrelationList(contactrelation) {
+        return request({
+            url: '/LabSystem/contactrelation/list',
+            method: 'get',
+            params: {
+                pageNo: contactrelation.pageNo,
+                pageSize: contactrelation.pageSize,
+                contactid: contactrelation.contactid,
+                departmentid: contactrelation.departmentid,
+                departmentname: contactrelation.departmentname
+            }
+        });
+    },
+    //新增对象
+    addContactrelation(contactrelation) {
+        return request({
+            url: '/LabSystem/contactrelation',
+            method: 'post',
+            data: contactrelation
+        });
+    },
+    //修改对象
+    updateContactrelation(contactrelation) {
+        return request({
+            url: '/LabSystem/contactrelation/update',
+            method: 'put',
+            data: contactrelation
+        })
+    },
+    //逻辑判断是新增还是修改
+    saveContactrelation(contactrelation) {
+        if (contactrelation.contactrelationid == null && contactrelation.contactrelationid == undefined) {
+            return this.addContactrelation(contactrelation);
+        } else {
+            return this.updateContactrelation(contactrelation);
+        }
+    },
+    //根据id查询
+    findOneContactrelation(cid, did) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/contactrelation/getcid=${cid}did=${did}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deleteContactrelation(cid, did) {
+        return request({
+            url: `/LabSystem/contactrelation/deletecid=${cid}did=${did}`,
+            method: 'delete'
+        });
+    }
 }

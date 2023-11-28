@@ -1,7 +1,10 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Officespace;
+import com.jack.LabSystem.model.entity.Researchlab;
+import com.jack.LabSystem.service.ResearchlabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,9 @@ public class OfficespaceController {
 
     @Autowired
     private OfficespaceService officespaceService;
+
+    @Autowired
+    private ResearchlabService researchlabService;
 
     //查询全部
     @GetMapping("/getAll")
@@ -70,22 +76,33 @@ public class OfficespaceController {
     //新增接口
     @PostMapping
     public ResultUtil addOfficespace(@RequestBody Officespace newOfficespace){
-        if(officespaceService.findByName(newOfficespace.getSpacename())==null) {
-            officespaceService.save(newOfficespace);
-            return ResultUtil.success("新增场地成功");
-        }else
+        //外键约束，检查新增研究室是否存在
+        if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
+            return ResultUtil.fail("研究室不存在！");
+        //重复约束，检查是否已有场地
+        if(officespaceService.findByName(newOfficespace.getSpacename())!=null) {
             return ResultUtil.fail("该场地已存在");
+        }
+        officespaceService.save(newOfficespace);
+        return ResultUtil.success("新增场地成功");
+
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateOfficespace(@RequestBody Officespace newOfficespace){
+        //外键约束，检查新增研究室是否存在
+        if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
+            return ResultUtil.fail("研究室不存在！");
+        //重复约束，检查是否已有场地
+        if(officespaceService.findByName(newOfficespace.getSpacename())!=null) {
+            return ResultUtil.fail("该场地已存在");
+        }
         officespaceService.updateById(newOfficespace);
         return ResultUtil.success("修改场地成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteOfficespace(@PathVariable("id") Integer id){
-
         officespaceService.removeById(id);
         return ResultUtil.success("删除场地成功");
     }

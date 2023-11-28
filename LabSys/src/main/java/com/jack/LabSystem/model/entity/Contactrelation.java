@@ -26,6 +26,9 @@ public class Contactrelation implements Serializable {
  @TableField("departmentname")
 private String departmentname;
 
+ @TableField("departmentid")
+private Integer departmentid;
+
  @TableField("Contactid")
 private Integer contactid;
 

@@ -64,7 +64,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="负责人ID" prop="leaderid" :label-width="formLabelWidth">
-                    <el-input v-model="departmentForm.researcherid" autocomplete="off"></el-input>
+                    <el-input v-model="departmentForm.leaderid" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="单位名称" prop="departmentname" :label-width="formLabelWidth">
                     <el-input v-model="departmentForm.departmentname" autocomplete="off"></el-input>

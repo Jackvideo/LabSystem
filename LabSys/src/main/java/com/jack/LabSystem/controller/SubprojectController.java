@@ -29,6 +29,12 @@ public class SubprojectController {
     @Autowired
     private SubprojectService subprojectService;
 
+    //根据id查询
+    @GetMapping("/getid={id}")
+    public ResultUtil findOne(@PathVariable Integer id) {
+        return ResultUtil.success(subprojectService.getById(id));
+    }
+
     //查询全部
     @GetMapping("/list")
     public ResultUtil<Map<String,Object>> getSubprojectList(@RequestParam(value = "projectid",required = false) Integer projectid,
