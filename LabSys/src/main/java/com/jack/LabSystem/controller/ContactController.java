@@ -1,9 +1,15 @@
 package com.jack.LabSystem.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jack.LabSystem.mapper.UserMapper;
 import com.jack.LabSystem.model.entity.Contact;
+import com.jack.LabSystem.model.entity.User;
+import com.jack.LabSystem.service.IUserService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import com.jack.LabSystem.util.ResultUtil;
 
@@ -11,6 +17,7 @@ import com.jack.LabSystem.service.ContactService;
 import com.jack.LabSystem.model.entity.Contact;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -43,6 +50,8 @@ public class ContactController {
                                                         @RequestParam(value = "email",required = false) String email,
                                                         @RequestParam("pageNo") Long pageNo,
                                                         @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Contact> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(contactid!=null ,Contact::getContactid,contactid);
         wrapper.eq(wphone!=null&&wphone!="",Contact::getWorkphone,wphone);
@@ -58,19 +67,24 @@ public class ContactController {
     //新增接口
     @PostMapping
     public ResultUtil addContact(@RequestBody Contact newContact){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         contactService.save(newContact);
         return ResultUtil.success("新增联系人成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateContact(@RequestBody Contact newContact){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         contactService.updateById(newContact);
         return ResultUtil.success("修改联系人成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteContact(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         contactService.removeById(id);
         return ResultUtil.success("删除联系人成功");
     }

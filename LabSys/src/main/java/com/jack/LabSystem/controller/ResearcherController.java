@@ -3,6 +3,7 @@ package com.jack.LabSystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Researchlab;
 import com.jack.LabSystem.service.ResearchlabService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,8 @@ public class ResearcherController {
                                                      @RequestParam(value = "researcharea",required = false) String area,
                                                      @RequestParam("pageNo") Long pageNo,
                                                      @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Researcher> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(rid!=null ,Researcher::getResearcherid,rid);
         wrapper.eq(labid!=null ,Researcher::getLabid,labid);
@@ -81,6 +84,8 @@ public class ResearcherController {
     //新增接口
     @PostMapping
     public ResultUtil addLab(@RequestBody Researcher laber){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束，检查新增研究室是否存在
         if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
@@ -93,6 +98,8 @@ public class ResearcherController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateLab(@RequestBody Researcher laber){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束，检查新增研究室是否存在
         if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
@@ -102,6 +109,8 @@ public class ResearcherController {
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteLab(@PathVariable("id") Integer id){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         researcherService.removeById(id);
         return ResultUtil.success("删除人员成功");
     }

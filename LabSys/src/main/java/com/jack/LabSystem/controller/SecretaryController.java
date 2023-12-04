@@ -2,6 +2,7 @@ package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Secretary;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class SecretaryController {
                                                           @RequestParam(value = "responsibility",required = false) String res,
                                                           @RequestParam("pageNo") Long pageNo,
                                                           @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Secretary> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(secretaryid!=null ,Secretary::getSecretaryid,secretaryid);
         wrapper.eq(time!=null&&time!="",Secretary::getHiretime,time);
@@ -56,19 +59,24 @@ public class SecretaryController {
     //新增接口
     @PostMapping
     public ResultUtil addSecretary(@RequestBody Secretary newSecretary){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         secretaryService.save(newSecretary);
         return ResultUtil.success("新增秘书成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateSecretary(@RequestBody Secretary newSecretary){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         secretaryService.updateById(newSecretary);
         return ResultUtil.success("修改秘书成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteSecretary(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         secretaryService.removeById(id);
         return ResultUtil.success("删除秘书成功");
     }

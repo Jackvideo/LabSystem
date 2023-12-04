@@ -2,6 +2,7 @@ package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Subproject;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,8 @@ public class SubprojectController {
                                                             @RequestParam(value = "technicalindex",required = false) String index,
                                                            @RequestParam("pageNo") Long pageNo,
                                                            @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Subproject> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(subprojectid!=null ,Subproject::getSubprojectid,subprojectid);
         wrapper.eq(projectid!=null ,Subproject::getProjectid,projectid);
@@ -62,19 +65,24 @@ public class SubprojectController {
     //新增接口
     @PostMapping
     public ResultUtil addSubproject(@RequestBody Subproject newSubproject){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         subprojectService.save(newSubproject);
         return ResultUtil.success("新增子项目成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateSubproject(@RequestBody Subproject newSubproject){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         subprojectService.updateById(newSubproject);
         return ResultUtil.success("修改子项目成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteSubproject(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         subprojectService.removeById(id);
         return ResultUtil.success("删除子项目成功");
     }

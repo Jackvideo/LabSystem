@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.*;
 import com.jack.LabSystem.service.OutcomeService;
 import com.jack.LabSystem.service.ResearcherService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,8 @@ public class ContributorController {
                                                         @RequestParam(value = "ranks",required = false) String rank,
                                                         @RequestParam("pageNo") Long pageNo,
                                                         @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Contributor> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(rid!=null ,Contributor::getResearcherid,rid);
         wrapper.eq(oid!=null ,Contributor::getOutcomeid,oid);
@@ -67,6 +70,8 @@ public class ContributorController {
     //新增接口
     @PostMapping
     public ResultUtil addContributor(@RequestBody Contributor contributor){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //检查外键约束，查看新增贡献记录的结果和研究人员信息是否存在
         QueryWrapper<Outcome> outcomeQueryWrapper=new QueryWrapper<>();
         QueryWrapper<Researcher> researcherQueryWrapper=new QueryWrapper<>();
@@ -81,6 +86,8 @@ public class ContributorController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateContributor(@RequestBody Contributor contributor){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Outcome> outcomeQueryWrapper=new QueryWrapper<>();
         QueryWrapper<Researcher> researcherQueryWrapper=new QueryWrapper<>();
         outcomeQueryWrapper.eq("outcomeid",contributor.getOutcomeid());
@@ -97,6 +104,8 @@ public class ContributorController {
     //直接物理删除
     @DeleteMapping("/deleteoid={oid}&rid={rid}")
     public ResultUtil deleteContributor(@PathVariable("oid") Integer oid,@PathVariable("rid") Integer rid){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Contributor> wrapper=new QueryWrapper<>();
         wrapper.eq("outcomeid",oid);
         wrapper.eq("researcherid",rid);

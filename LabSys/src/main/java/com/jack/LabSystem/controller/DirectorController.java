@@ -2,6 +2,7 @@ package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Director;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,8 @@ public class DirectorController {
                                                         @RequestParam(value = "term",required = false) String term,
                                                         @RequestParam("pageNo") Long pageNo,
                                                         @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Director> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(directorid!=null ,Director::getDirectorid,directorid);
         wrapper.eq(labid!=null ,Director::getLabid,labid);
@@ -58,19 +61,24 @@ public class DirectorController {
     //新增接口
     @PostMapping
     public ResultUtil addDirector(@RequestBody Director newDirector){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         directorService.save(newDirector);
         return ResultUtil.success("新增研究室主任成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateDirector(@RequestBody Director newDirector){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         directorService.updateById(newDirector);
         return ResultUtil.success("修改主任信息成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteDirector(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         directorService.removeById(id);
         return ResultUtil.success("删除研究室主任成功");
     }

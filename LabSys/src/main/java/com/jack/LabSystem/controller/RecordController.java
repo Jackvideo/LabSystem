@@ -7,6 +7,7 @@ import com.jack.LabSystem.model.entity.Project;
 import com.jack.LabSystem.model.entity.Record;
 import com.jack.LabSystem.service.ProjectService;
 import com.jack.LabSystem.service.ResearcherService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,8 @@ public class RecordController {
                                                      @RequestParam(value = "allocatedfund", required = false) String fund,
                                                      @RequestParam("pageNo") Long pageNo,
                                                      @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Record> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(rid!=null ,Record::getResearcherid,rid);
         wrapper.eq(pid!=null ,Record::getProjectid,pid);
@@ -72,6 +75,8 @@ public class RecordController {
     //新增接口
     @PostMapping
     public ResultUtil addRecord(@RequestBody Record recorder){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束
         if(researcherService.getById(recorder.getResearcherid())==null||projectService.getById(recorder.getProjectid())==null)
             return  ResultUtil.fail("信息不存在！违反外键约束");
@@ -81,6 +86,8 @@ public class RecordController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateRecord(@RequestBody Record recorder){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束
         if(researcherService.getById(recorder.getResearcherid())==null||projectService.getById(recorder.getProjectid())==null)
             return  ResultUtil.fail("信息不存在！违反外键约束");
@@ -93,6 +100,8 @@ public class RecordController {
     //直接物理删除
     @DeleteMapping("/deletepid={pid}&rid={rid}")
     public ResultUtil deleteRecord(@PathVariable("pid") Integer pid,@PathVariable("rid") Integer rid){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Record> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",pid);
         wrapper.eq("researcherid",rid);

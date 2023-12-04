@@ -1,25 +1,30 @@
 package com.jack.LabSystem.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("user")
 public class User {
 
-    //忽略用户模块，直接写死
-    public User(){
-        username="admin";
-        password="111111";
-    };
-
-    @Autowired
+    @TableId(value = "id",type = IdType.AUTO)
     public int id;
 
-    @Autowired
+    @TableField("username")
     public String username;
 
-    @Autowired
+    @TableField("password")
     public String password;
 
+    @TableField("authority")
+    public String authority;
 }

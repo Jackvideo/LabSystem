@@ -3,6 +3,7 @@ package com.jack.LabSystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Outcome;
 import com.jack.LabSystem.service.LeaderService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,8 @@ public class ProjectController {
                                                      @RequestParam(value = "enddate",required = false) String enddate,
                                                      @RequestParam("pageNo") Long pageNo,
                                                      @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(projectid!=null ,Project::getProjectid,projectid);
         wrapper.eq(leaderid!=null ,Project::getLeaderid,leaderid);
@@ -80,6 +83,8 @@ public class ProjectController {
     //新增接口
     @PostMapping
     public ResultUtil addProject(@RequestBody Project newProject){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束
         if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
             return ResultUtil.fail("负责人不存在！");
@@ -94,6 +99,8 @@ public class ProjectController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateProject(@RequestBody Project newProject){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束
         if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
             return ResultUtil.fail("负责人不存在！");
@@ -107,7 +114,8 @@ public class ProjectController {
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteProject(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         projectService.removeById(id);
         return ResultUtil.success("删除项目成功");
     }

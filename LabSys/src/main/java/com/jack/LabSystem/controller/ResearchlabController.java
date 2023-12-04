@@ -1,11 +1,8 @@
 package com.jack.LabSystem.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jack.LabSystem.mapper.ResearchlabMapper;
+import com.jack.LabSystem.util.Authority;
 import com.jack.LabSystem.util.ResultUtil;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +11,6 @@ import com.jack.LabSystem.service.ResearchlabService;
 import com.jack.LabSystem.model.entity.Researchlab;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -58,6 +54,8 @@ public class ResearchlabController {
                                                  @RequestParam(value = "researcharea",required = false) String area,
                                                  @RequestParam("pageNo") Long pageNo,
                                                  @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Researchlab> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(id!=null ,Researchlab::getLabid,id);
         wrapper.eq(labname!=null&&labname!="",Researchlab::getLabname,labname);
@@ -73,6 +71,8 @@ public class ResearchlabController {
      //新增接口
      @PostMapping
     public ResultUtil addLab(@RequestBody Researchlab newlab){
+         if(Authority.getAuthority()<2)
+             return ResultUtil.fail("用户权限不足");
         if(researchlabService.findByName(newlab.getLabname())==null) {
             researchlabService.save(newlab);
             return ResultUtil.success("新增研究室成功");
@@ -82,13 +82,16 @@ public class ResearchlabController {
      //修改接口
     @PutMapping("/update")
     public ResultUtil updateLab(@RequestBody Researchlab newlab){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         researchlabService.updateById(newlab);
         return ResultUtil.success("修改研究室成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteLab(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         researchlabService.removeById(id);
         return ResultUtil.success("删除研究室成功");
     }

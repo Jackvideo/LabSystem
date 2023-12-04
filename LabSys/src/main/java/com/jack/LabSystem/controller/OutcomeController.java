@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Project;
 import com.jack.LabSystem.model.entity.Researchlab;
 import com.jack.LabSystem.service.ProjectService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,8 @@ public class OutcomeController {
                                                      @RequestParam(value = "type",required = false) String type,
                                                      @RequestParam("pageNo") Long pageNo,
                                                      @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Outcome> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(projectid!=null ,Outcome::getProjectid,projectid);
         wrapper.eq(outcomeid!=null ,Outcome::getOutcomeid,outcomeid);
@@ -79,6 +82,8 @@ public class OutcomeController {
     //新增接口
     @PostMapping
     public ResultUtil addOutcome(@RequestBody Outcome newOutcome){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束，检查新增结果项目是否存在
         if(projectService.getById(newOutcome.getProjectid())==null)
             return ResultUtil.fail("项目不存在！");
@@ -93,6 +98,8 @@ public class OutcomeController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateOutcome(@RequestBody Outcome newOutcome){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束，检查新增结果项目是否存在
         if(projectService.getById(newOutcome.getProjectid())==null)
             return ResultUtil.fail("项目不存在！");
@@ -106,7 +113,8 @@ public class OutcomeController {
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteOutcome(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         outcomeService.removeById(id);
         return ResultUtil.success("删除项目结果成功");
     }

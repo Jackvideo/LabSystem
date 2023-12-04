@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.mapper.UserMapper;
 import com.jack.LabSystem.model.entity.User;
 import com.jack.LabSystem.service.IUserService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -31,16 +31,15 @@ public class IUserServiceImpl implements IUserService {
         wrapper.eq(User::getUsername, user.getUsername());
         wrapper.eq(User::getPassword, user.getPassword());
         User loginUser = (User) userMapper.selectOne(wrapper);
-
+        Authority authority=Authority.getInstance();
+        authority.setLoginUser(loginUser);
         // 结果不为空，生成token，将用户信息存入redis
         if (loginUser != null) {
             // 用UUID，终极方案是jwt
             String key = "user:" + UUID.randomUUID();
-
             // 存入redis
             loginUser.setPassword(null);    // 设置密码为空，密码没必要放入
             redisTemplate.opsForValue().set(key, loginUser,30, TimeUnit.MINUTES);   // timeout为登录时间
-
             // 返回数据
             Map<String, Object> data = new HashMap<>();
             data.put("token",key);
@@ -60,12 +59,8 @@ public class IUserServiceImpl implements IUserService {
             User loginUser = JSON.parseObject(JSON.toJSONString(obj), User.class);
             Map<String,Object> data = new HashMap<>();
             data.put("name",loginUser.getUsername());
-
-
             // 先在xml里写SQL语句id=getRoleNameByUserId，然后去UserMapper里实现接口
-            List<String> roleList = userMapper.getRoleNameByUserId(loginUser.getId());
-            data.put("roles",roleList);
-
+            data.put("authority",loginUser.getAuthority());
             return data;
         }
 

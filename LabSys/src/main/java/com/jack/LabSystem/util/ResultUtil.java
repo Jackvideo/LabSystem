@@ -12,7 +12,7 @@ public class ResultUtil<T> {
     //状态码的信息
     private Integer code;
     //错误信息
-    private String msg;
+    private String message;
     //接收的数据
     private T data;
 
@@ -34,7 +34,7 @@ public class ResultUtil<T> {
         //创建一个结果对象
         ResultUtil<T> result =new ResultUtil<>();
         result.setCode(20000);
-        result.setMsg(message);
+        result.setMessage(message);
         return result;
     }
     /**
@@ -47,7 +47,7 @@ public class ResultUtil<T> {
         //创建一个结果对象
         ResultUtil<T> result =new ResultUtil<>();
         result.setCode(-1);
-        result.setMsg(msg);
+        result.setMessage(msg);
         return result;
     }
 

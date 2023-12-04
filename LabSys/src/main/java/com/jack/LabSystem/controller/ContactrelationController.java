@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.*;
 import com.jack.LabSystem.service.ContactService;
 import com.jack.LabSystem.service.DepartmentService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,8 @@ public class ContactrelationController {
                                                           @RequestParam(value = "departmentname",required = false) String name,
                                                           @RequestParam("pageNo") Long pageNo,
                                                           @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Contactrelation> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(cid!=null ,Contactrelation::getContactid,cid);
         wrapper.eq(did!=null ,Contactrelation::getDepartmentid,did);
@@ -67,6 +70,8 @@ public class ContactrelationController {
     //新增接口
     @PostMapping
     public ResultUtil addContactrelation(@RequestBody Contactrelation newRelation){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //添加外键约束，判断新增联系关系的单位和联系人是否已存在
         QueryWrapper<Department> departmentwrapper=new QueryWrapper<>();
         QueryWrapper<Contact> contactwrapper=new QueryWrapper<>();
@@ -83,6 +88,8 @@ public class ContactrelationController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateContactrelation(@RequestBody Contactrelation newRelation){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Department> departmentwrapper=new QueryWrapper<>();
         QueryWrapper<Contact> contactwrapper=new QueryWrapper<>();
         departmentwrapper.eq("departmentid",newRelation.getDepartmentid());
@@ -100,6 +107,8 @@ public class ContactrelationController {
     //直接物理删除
     @DeleteMapping("/deletecid={cid}did={did}")
     public ResultUtil deleteContactrelation(@PathVariable("did") Integer did,@PathVariable("cid") Integer cid){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Contactrelation> wrapper=new QueryWrapper<>();
         wrapper.eq("departmentid",did);
         wrapper.eq("contactid",cid);

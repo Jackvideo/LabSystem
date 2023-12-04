@@ -3,6 +3,7 @@ package com.jack.LabSystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jack.LabSystem.model.entity.Leader;
 import com.jack.LabSystem.model.entity.Leader;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,8 @@ public class LeaderController {
                                                              @RequestParam(value = "email",required = false) String email,
                                                              @RequestParam("pageNo") Long pageNo,
                                                              @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Leader> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(leaderid!=null ,Leader::getLeaderid,leaderid);
         wrapper.eq(wphone!=null&&wphone!="",Leader::getWorkphone,wphone);
@@ -60,19 +63,24 @@ public class LeaderController {
     //新增接口
     @PostMapping
     public ResultUtil addLeader(@RequestBody Leader newLeader){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
             leaderService.save(newLeader);
             return ResultUtil.success("新增负责人成功");
     }
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateLeader(@RequestBody Leader newLeader){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         leaderService.updateById(newLeader);
         return ResultUtil.success("修改负责人成功");
     }
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteLeader(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         leaderService.removeById(id);
         return ResultUtil.success("删除负责人成功");
     }

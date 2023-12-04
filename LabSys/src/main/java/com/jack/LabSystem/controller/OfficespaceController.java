@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Officespace;
 import com.jack.LabSystem.model.entity.Researchlab;
 import com.jack.LabSystem.service.ResearchlabService;
+import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,8 @@ public class OfficespaceController {
                                                          @RequestParam(value = "address",required = false) String address,
                                                          @RequestParam("pageNo") Long pageNo,
                                                          @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Officespace> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Spaceid!=null ,Officespace::getSpaceid,Spaceid);
         wrapper.eq(Labid!=null ,Officespace::getLabid,Labid);
@@ -75,7 +78,9 @@ public class OfficespaceController {
 
     //新增接口
     @PostMapping
-    public ResultUtil addOfficespace(@RequestBody Officespace newOfficespace){
+    public ResultUtil addOfficespace(@RequestBody Officespace newOfficespace){if(Authority.getAuthority()<2)
+        return ResultUtil.fail("用户权限不足");
+
         //外键约束，检查新增研究室是否存在
         if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
@@ -90,6 +95,8 @@ public class OfficespaceController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateOfficespace(@RequestBody Officespace newOfficespace){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         //外键约束，检查新增研究室是否存在
         if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
@@ -103,6 +110,8 @@ public class OfficespaceController {
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteOfficespace(@PathVariable("id") Integer id){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         officespaceService.removeById(id);
         return ResultUtil.success("删除场地成功");
     }

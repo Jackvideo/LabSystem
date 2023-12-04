@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Department;
 import com.jack.LabSystem.model.entity.Leader;
 import com.jack.LabSystem.service.LeaderService;
+import com.jack.LabSystem.util.Authority;
 import com.jack.LabSystem.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,6 +51,8 @@ public class DepartmentController {
                                                             @RequestParam(value = "type",required = false) String type,
                                                           @RequestParam("pageNo") Long pageNo,
                                                           @RequestParam("pageSize") Long pageSize){
+        if(Authority.getAuthority()<1)
+            return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Department> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(departmentid!=null ,Department::getDepartmentid,departmentid);
         wrapper.eq(leaderid!=null ,Department::getLeaderid,leaderid);
@@ -66,6 +69,8 @@ public class DepartmentController {
     //新增接口
     @PostMapping
     public ResultUtil addDepartment(@RequestBody Department newDepartment){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
@@ -76,6 +81,8 @@ public class DepartmentController {
     //修改接口
     @PutMapping("/update")
     public ResultUtil updateDepartment(@RequestBody Department newDepartment){
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
@@ -86,7 +93,8 @@ public class DepartmentController {
     //直接物理删除
     @DeleteMapping("/deleteid={id}")
     public ResultUtil deleteDepartment(@PathVariable("id") Integer id){
-
+        if(Authority.getAuthority()<2)
+            return ResultUtil.fail("用户权限不足");
         departmentService.removeById(id);
         return ResultUtil.success("删除单位成功");
     }
