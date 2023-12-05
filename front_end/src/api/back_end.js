@@ -791,5 +791,62 @@ export default {
             url: `/LabSystem/contactrelation/deletecid=${cid}did=${did}`,
             method: 'delete'
         });
-    }
+    },
+
+    //Pdrelation
+    //按参数获取对象
+    getPdrelationList(pdrelation) {
+        return request({
+            url: '/LabSystem/pdrelation/list',
+            method: 'get',
+            params: {
+                pageNo: pdrelation.pageNo,
+                pageSize: pdrelation.pageSize,
+                projectid: pdrelation.projectid,
+                projectname: pdrelation.projectname,
+                partner: pdrelation.partner,
+                principle: pdrelation.principle,
+                qualifier: pdrelation.qualifier
+            }
+        });
+    },
+    //新增对象
+    addPdrelation(pdrelation) {
+        return request({
+            url: '/LabSystem/pdrelation',
+            method: 'post',
+            data: pdrelation
+        });
+    },
+    //修改对象
+    updatePdrelation(pdrelation) {
+        return request({
+            url: '/LabSystem/pdrelation/update',
+            method: 'put',
+            data: pdrelation
+        })
+    },
+    //逻辑判断是新增还是修改
+    savePdrelation(pdrelation) {
+        if (pdrelation.pdrelationid == null && pdrelation.pdrelationid == undefined) {
+            return this.addPdrelation(pdrelation);
+        } else {
+            return this.updatePdrelation(pdrelation);
+        }
+    },
+    //根据id查询
+    findOnePdrelation(id) {
+        return request({
+            //使用``能包含${}变量
+            url: `/LabSystem/pdrelation/getid=${id}`,
+            method: 'get'
+        });
+    },
+    //删除对象
+    deletePdrelation(id) {
+        return request({
+            url: `/LabSystem/pdrelation/deleteid=${id}`,
+            method: 'delete'
+        });
+    },
 }

@@ -55,15 +55,12 @@ export const constantRoutes = [
     }]
   },
 
-
-
-  //新增查询页面
   {
-    path: '/search',
+    path: '/department',
     component: Layout,
-    redirect: '/search/main',
-    name: 'Search',
-    meta: { title: '数据查询', icon: 'el-icon-s-help' },
+    redirect: '/department/main',
+    name: 'Department',
+    meta: { title: '单位模块', icon: 'el-icon-office-building' },
     children: [
       {
         path: 'space',
@@ -78,6 +75,27 @@ export const constantRoutes = [
         meta: { title: '研究室', icon: 'el-icon-school' }
       },
       {
+        path: 'department',
+        name: 'Department',
+        component: () => import('@/views/search/department'),
+        meta: { title: '三方单位', icon: 'el-icon-menu' }
+      },
+      {
+        path: 'contactrelation',
+        name: 'Contactrelation',
+        component: () => import('@/views/search/contactrelation'),
+        meta: { title: '联系人记录', icon: 'el-icon-notebook-1' }
+      }
+    ]
+  },
+  {
+    path: '/worker',
+    component: Layout,
+    redirect: '/worker/main',
+    name: 'Worker',
+    meta: { title: '人员模块', icon: 'el-icon-user-solid' },
+    children: [
+      {
         path: 'researcher',
         name: 'Researchers',
         component: () => import('@/views/search/labers'),
@@ -88,12 +106,29 @@ export const constantRoutes = [
         name: 'Worker',
         component: () => import('@/views/search/worker'),
         meta: { title: '工作人员', icon: 'el-icon-user-solid' }
-      },
+      }
+    ]
+  },
+
+
+  {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/main',
+    name: 'Project',
+    meta: { title: '项目模块', icon: 'table' },
+    children: [
       {
         path: 'project',
         name: 'Project',
         component: () => import('@/views/search/project'),
         meta: { title: '科研项目', icon: 'table' }
+      },
+      {
+        path: 'pdrelation',
+        name: 'Pdrelation',
+        component: () => import('@/views/search/pdrelation'),
+        meta: { title: '项目单位联系', icon: 'table' }
       },
       {
         path: 'outcome',
@@ -105,26 +140,25 @@ export const constantRoutes = [
         path: 'contributor',
         name: 'Contributor',
         component: () => import('@/views/search/contributor'),
-        meta: { title: '贡献记录', icon: 'el-icon-user-solid' }
+        meta: { title: '贡献记录', icon: 'el-icon-notebook-2' }
       },
       {
         path: 'record',
         name: 'Record',
         component: () => import('@/views/search/record'),
         meta: { title: '研究人员参与记录', icon: 'el-icon-notebook-1' }
-      },
-      {
-        path: 'department',
-        name: 'Department',
-        component: () => import('@/views/search/department'),
-        meta: { title: '三方单位', icon: 'el-icon-menu' }
-      },
-      {
-        path: 'contactrelation',
-        name: 'Contactrelation',
-        component: () => import('@/views/search/contactrelation'),
-        meta: { title: '联系人记录', icon: 'el-icon-menu' }
       }
+    ]
+  },
+
+  {
+    path: '/else',
+    component: Layout,
+    redirect: '/else/main',
+    name: 'Else',
+    meta: { title: '其他模块', icon: 'el-icon-s-help' },
+    children: [
+
     ]
   },
 

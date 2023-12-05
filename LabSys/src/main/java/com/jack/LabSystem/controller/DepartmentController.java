@@ -1,6 +1,7 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Department;
 import com.jack.LabSystem.model.entity.Leader;
@@ -71,6 +72,7 @@ public class DepartmentController {
     public ResultUtil addDepartment(@RequestBody Department newDepartment){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
+        //联系人外键约束
         QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
@@ -84,6 +86,7 @@ public class DepartmentController {
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
         QueryWrapper<Leader> leaderQueryWrapper=new QueryWrapper<>();
+        //联系人外键约束
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
             return ResultUtil.fail("联系人不存在！");
