@@ -35,7 +35,7 @@
                 </el-table-column>
                 <el-table-column label="  操作" width="200">
                     <template v-slot="scope">
-                        <el-button @click="openEdit(scope.row.pdrelationid)" type="primary" icon="el-icon-edit"
+                        <el-button @click="openEdit(scope.row.recordid)" type="primary" icon="el-icon-edit"
                             circle></el-button>
                         <el-button @click="deletePdrelationorNot(scope.row)" type="danger" icon="el-icon-delete"
                             circle></el-button>
@@ -171,7 +171,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                CommonApi.deletePdrelation(Pdrelation.pdrelationid).then(response => {
+                CommonApi.deletePdrelation(Pdrelation.recordid).then(response => {
                     this.$message({
                         type: 'success',
                         message: '删除成功!'

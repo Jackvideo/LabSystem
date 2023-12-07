@@ -14,8 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface PdrelationService extends IService<Pdrelation> {
 
 
-    public boolean hasPrinciple(Integer projectid);
+    public Integer hasPrinciple(Integer projectid);
 
-    public boolean hasQualifier(Integer projectid);
+    public Integer hasQualifier(Integer projectid);
 
 }

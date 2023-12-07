@@ -41,6 +41,7 @@ public class UserController {
         return ResultUtil.fail("用户名或密码错误");
     }
 
+
     @GetMapping("/info")
     public ResultUtil<Map<String,Object>> getUserInfo(@RequestParam("token") String token){
         // @RequestParam("token") 是从url中获取值

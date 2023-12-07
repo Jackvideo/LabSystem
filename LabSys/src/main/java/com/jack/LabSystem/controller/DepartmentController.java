@@ -77,6 +77,12 @@ public class DepartmentController {
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
             return ResultUtil.fail("联系人不存在！");
+        //唯一性约束
+    QueryWrapper<Department> departmentQueryWrapper=new QueryWrapper<>();
+    departmentQueryWrapper.eq("departmentname",newDepartment.getDepartmentname());
+    Department department=departmentService.getOne(departmentQueryWrapper);
+    if(department!=null&&department.getDepartmentid()!=newDepartment.getDepartmentid())
+        return ResultUtil.fail("该单位已存在！");
         departmentService.save(newDepartment);
         return ResultUtil.success("新增单位成功");
     }
@@ -90,6 +96,12 @@ public class DepartmentController {
         leaderQueryWrapper.eq("leaderid",newDepartment.getLeaderid());
         if(leaderService.getOne(leaderQueryWrapper)==null)
             return ResultUtil.fail("联系人不存在！");
+        //唯一性约束
+        QueryWrapper<Department> departmentQueryWrapper=new QueryWrapper<>();
+        departmentQueryWrapper.eq("departmentname",newDepartment.getDepartmentname());
+        Department department=departmentService.getOne(departmentQueryWrapper);
+        if(department!=null&&department.getDepartmentid()!=newDepartment.getDepartmentid())
+            return ResultUtil.fail("该单位已存在！");
         departmentService.updateById(newDepartment);
         return ResultUtil.success("修改单位成功");
     }

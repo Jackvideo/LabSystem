@@ -22,6 +22,8 @@ import lombok.EqualsAndHashCode;
 @TableName("contactrelation")
 public class Contactrelation implements Serializable {
 
+    @TableField("recordid")
+    private Integer recordid;
 
  @TableField("departmentname")
 private String departmentname;

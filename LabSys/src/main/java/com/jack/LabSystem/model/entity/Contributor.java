@@ -22,6 +22,8 @@ import lombok.EqualsAndHashCode;
 @TableName("contributor")
 public class Contributor implements Serializable {
 
+    @TableField("Recordid")
+    private Integer recordid;
 
  @TableField("Outcomeid")
 private Integer outcomeid;

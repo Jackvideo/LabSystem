@@ -28,10 +28,11 @@ public class Authority {
     }
 
     private static User loginUser;
+    //根据用户权限属性返回权限等级
     public static int getAuthority(){
         switch (loginUser.getAuthority()){
-            case "admin" : return 1;
-            case "normal" : return 2;
+            case "admin" : return 2;
+            case "normal" : return 1;
             case "tourist" : return 0;
             default: return 0;
         }

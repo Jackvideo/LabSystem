@@ -96,8 +96,7 @@ public class ContributorController {
             return ResultUtil.fail("贡献记录信息不存在！");
         }
         QueryWrapper<Contributor> wrapper=new QueryWrapper<>();
-        wrapper.eq("outcomeid",contributor.getOutcomeid());
-        wrapper.eq("researcherid",contributor.getResearcherid());
+        wrapper.eq("recordid",contributor.getRecordid());
         contributorService.update(contributor,wrapper);
         return ResultUtil.success("修改贡献记录成功");
     }

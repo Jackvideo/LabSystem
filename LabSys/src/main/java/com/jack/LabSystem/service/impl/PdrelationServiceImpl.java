@@ -8,6 +8,10 @@ import com.jack.LabSystem.service.PdrelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务实现类
@@ -21,26 +25,30 @@ public class PdrelationServiceImpl extends ServiceImpl<PdrelationMapper, Pdrelat
 
 
     @Autowired
-    private PdrelationService pdrelationService;
+    private PdrelationMapper pdrelationMapper;
 
 
     @Override
-    public boolean hasPrinciple(Integer pid) {
+    public Integer hasPrinciple(Integer pid) {
         QueryWrapper<Pdrelation> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",pid);
-        Pdrelation pdrelation = pdrelationService.getOne(wrapper);
-        if(pdrelation.getPrinciple()!=null&&pdrelation.getPrinciple()!="")
-            return true;
-        return false;
+        List<Pdrelation> pdrelationList = pdrelationMapper.selectList(wrapper);
+        for(Pdrelation temppd:pdrelationList) {
+            if (temppd.getPrinciple() != null && temppd.getPrinciple() != "")
+                return temppd.getRecordid();
+        }
+        return -1;
     }
 
     @Override
-    public boolean hasQualifier(Integer pid) {
+    public Integer hasQualifier(Integer pid) {
         QueryWrapper<Pdrelation> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",pid);
-        Pdrelation pdrelation = pdrelationService.getOne(wrapper);
-        if(pdrelation.getQualifier()!=null&&pdrelation.getQualifier()!="")
-            return true;
-        return false;
+        List<Pdrelation> pdrelationList = pdrelationMapper.selectList(wrapper);
+        for(Pdrelation temppd:pdrelationList) {
+            if (temppd.getQualifier() != null && temppd.getQualifier() != "")
+                return temppd.getRecordid();
+        }
+        return -1;
     }
 }

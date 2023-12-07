@@ -4,11 +4,11 @@
         <el-card id="search">
             <el-row>
                 <el-col :span="22">
-                    <el-input v-model.trim="researcher.id" placeholder="人员ID"></el-input>
+                    <el-input v-model.trim="researcher.researcherid" placeholder="人员ID"></el-input>
                     <el-input v-model.trim="researcher.labid" placeholder="研究室ID" clearable></el-input>
-                    <el-input v-model.trim="researcher.name" placeholder="姓名" clearable></el-input>
+                    <el-input v-model="researcher.researchername" placeholder="姓名" clearable></el-input>
                     <el-input v-model.trim="researcher.gender" placeholder="性别"></el-input>
-                    <el-input v-model.trim="researcher.researcherarea" placeholder="研究领域" clearable></el-input>
+                    <el-input v-model="researcher.researcherarea" placeholder="研究领域" clearable></el-input>
                     <el-button @click="getLaberList" type="primary" round icon="el-icon-search">查询</el-button>
                 </el-col>
                 <el-col :span="2">

@@ -23,8 +23,10 @@ import lombok.experimental.Accessors;
 @TableName("pdrelation")
 public class Pdrelation implements Serializable {
 
+@TableId(value = "Recordid",type = IdType.AUTO)
+private Integer recordid;
 
-@TableId(value = "projectid",type = IdType.AUTO)
+@TableField("projectid")
 private Integer projectid;
 
 @TableField("projectname")

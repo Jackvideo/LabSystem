@@ -89,11 +89,13 @@ public class ResearcherController {
         //外键约束，检查新增研究室是否存在
         if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
-        if(researcherService.findByName(laber.getResearchername())==null) {
-            researcherService.save(laber);
-            return ResultUtil.success("新增人员成功");
-        }else
+        //重复性约束
+        if(researcherService.findByName(laber.getResearchername())!=null) {
             return ResultUtil.fail("已存在该人员");
+        }
+        researcherService.save(laber);
+        return ResultUtil.success("新增人员成功");
+
     }
     //修改接口
     @PutMapping("/update")
@@ -103,6 +105,10 @@ public class ResearcherController {
         //外键约束，检查新增研究室是否存在
         if(laber.getLabid()!=null&&researchlabService.getById(laber.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
+        Researcher templaber=researcherService.findByName(laber.getResearchername());
+        if(templaber!=null&&templaber.getResearcherid()!=laber.getResearcherid()) {
+            return ResultUtil.fail("已存在该人员");
+        }
         researcherService.updateById(laber);
         return ResultUtil.success("修改人员成功");
     }

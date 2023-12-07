@@ -23,6 +23,8 @@ import lombok.EqualsAndHashCode;
 @TableName("record")
 public class Record implements Serializable {
 
+    @TableField("Recordid")
+    private Integer recordid;
 
  @TableField("Researcherid")
 private Integer researcherid;

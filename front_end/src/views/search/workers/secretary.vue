@@ -53,7 +53,7 @@
                 <el-form-item label="聘用时间" prop="startdate" :label-width="formLabelWidth">
                     <el-date-picker v-model="secretaryForm.hiretime" type="date" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="职责" prop="term" :label-width="formLabelWidth">
+                <el-form-item label="职责" prop="responsibility" :label-width="formLabelWidth">
                     <el-input v-model="secretaryForm.responsibility" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>

@@ -58,8 +58,8 @@
                 <el-form-item label="移动电话" prop="mobilephone" :label-width="formLabelWidth">
                     <el-input v-model="leaderForm.mobilephone" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="totalfund" :label-width="formLabelWidth">
-                    <el-input v-model="leaderForm.totalfund" autocomplete="off"></el-input>
+                <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
+                    <el-input v-model="leaderForm.email" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

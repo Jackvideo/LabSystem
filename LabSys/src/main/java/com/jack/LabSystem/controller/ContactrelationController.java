@@ -99,8 +99,7 @@ public class ContactrelationController {
             return ResultUtil.fail("联系关系不存在！");
         }
         QueryWrapper<Contactrelation> wrapper=new QueryWrapper<>();
-        wrapper.eq("departmentid",newRelation.getDepartmentid());
-        wrapper.eq("contactid",newRelation.getContactid());
+        wrapper.eq("recordid",newRelation.getRecordid());
         contactrelationService.update(newRelation,wrapper);
         return ResultUtil.success("修改联系关系成功");
     }

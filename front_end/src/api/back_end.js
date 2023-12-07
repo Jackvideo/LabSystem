@@ -322,7 +322,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveLeader(leader) {
-        if (leader.spaceid == null && leader.spaceid == undefined) {
+        if (leader.leaderid == null && leader.leaderid == undefined) {
             return this.addLeader(leader);
         } else {
             return this.updateLeader(leader);
@@ -378,7 +378,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveDirector(director) {
-        if (director.spaceid == null && director.spaceid == undefined) {
+        if (director.directorid == null && director.directorid == undefined) {
             return this.addDirector(director);
         } else {
             return this.updateDirector(director);
@@ -433,7 +433,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveSecretary(secretary) {
-        if (secretary.spaceid == null && secretary.spaceid == undefined) {
+        if (secretary.secretaryid == null && secretary.secretaryid == undefined) {
             return this.addSecretary(secretary);
         } else {
             return this.updateSecretary(secretary);
@@ -489,7 +489,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveContact(contact) {
-        if (contact.spaceid == null && contact.spaceid == undefined) {
+        if (contact.contactid == null && contact.contactid == undefined) {
             return this.addContact(contact);
         } else {
             return this.updateContact(contact);
@@ -547,24 +547,24 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveSubproject(subproject) {
-        if (subproject.spaceid == null && subproject.spaceid == undefined) {
+        if (subproject.projectid == null) {
             return this.addSubproject(subproject);
         } else {
             return this.updateSubproject(subproject);
         }
     },
     //根据id查询
-    findOneSubproject(id) {
+    findOneSubproject(pid, sid) {
         return request({
             //使用``能包含${}变量
-            url: `/LabSystem/subproject/getid=${id}`,
+            url: `/LabSystem/subproject/getpid=${pid}sid=${sid}`,
             method: 'get'
         });
     },
     //删除对象
-    deleteSubproject(id) {
+    deleteSubproject(pid, sid) {
         return request({
-            url: `/LabSystem/subproject/deleteid=${id}`,
+            url: `/LabSystem/subproject/deletepid=${pid}sid=${sid}`,
             method: 'delete'
         });
     },
@@ -578,6 +578,7 @@ export default {
             params: {
                 pageNo: record.pageNo,
                 pageSize: record.pageSize,
+                recordid: record.recordid,
                 projectid: record.projectid,
                 researcherid: record.researcherid,
                 participationdate: record.participationdate,
@@ -604,7 +605,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveRecord(record) {
-        if (record.recordid == null && record.recordid == undefined) {
+        if (record.recordid == null && record.record == undefined) {
             return this.addRecord(record);
         } else {
             return this.updateRecord(record);
@@ -692,6 +693,7 @@ export default {
             params: {
                 pageNo: contributor.pageNo,
                 pageSize: contributor.pageSize,
+                recordid: contributor.recordid,
                 outcomeid: contributor.outcomeid,
                 researcherid: contributor.researcherid,
                 ranks: contributor.rank
@@ -716,7 +718,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveContributor(contributor) {
-        if (contributor.contributorid == null && contributor.contributorid == undefined) {
+        if (contributor.recordid == null && contributor.recordid == undefined) {
             return this.addContributor(contributor);
         } else {
             return this.updateContributor(contributor);
@@ -747,6 +749,7 @@ export default {
             params: {
                 pageNo: contactrelation.pageNo,
                 pageSize: contactrelation.pageSize,
+                recordid: contactrelation.recordid,
                 contactid: contactrelation.contactid,
                 departmentid: contactrelation.departmentid,
                 departmentname: contactrelation.departmentname
@@ -771,7 +774,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveContactrelation(contactrelation) {
-        if (contactrelation.contactrelationid == null && contactrelation.contactrelationid == undefined) {
+        if (contactrelation.recordid == null && contactrelation.recordid == undefined) {
             return this.addContactrelation(contactrelation);
         } else {
             return this.updateContactrelation(contactrelation);
@@ -802,6 +805,7 @@ export default {
             params: {
                 pageNo: pdrelation.pageNo,
                 pageSize: pdrelation.pageSize,
+                recordid: pdrelation.recordid,
                 projectid: pdrelation.projectid,
                 projectname: pdrelation.projectname,
                 partner: pdrelation.partner,
@@ -828,7 +832,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     savePdrelation(pdrelation) {
-        if (pdrelation.pdrelationid == null && pdrelation.pdrelationid == undefined) {
+        if (pdrelation.recordid == null && pdrelation.recordid == undefined) {
             return this.addPdrelation(pdrelation);
         } else {
             return this.updatePdrelation(pdrelation);

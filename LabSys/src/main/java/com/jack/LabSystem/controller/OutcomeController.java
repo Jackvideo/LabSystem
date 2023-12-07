@@ -88,7 +88,8 @@ public class OutcomeController {
         if(projectService.getById(newOutcome.getProjectid())==null)
             return ResultUtil.fail("项目不存在！");
         //重复约束，检查是否已存在项目结果
-        if(outcomeService.findByName(newOutcome.getOutcomename())!=null) {
+        Outcome outcome = outcomeService.findByName(newOutcome.getOutcomename());
+        if(outcome!=null&&outcome.getOutcomeid()!= newOutcome.getOutcomeid()) {
             return ResultUtil.fail("项目结果已存在");
         }
         outcomeService.save(newOutcome);
@@ -104,7 +105,8 @@ public class OutcomeController {
         if(projectService.getById(newOutcome.getProjectid())==null)
             return ResultUtil.fail("项目不存在！");
         //重复约束，检查是否已存在项目结果
-        if(outcomeService.findByName(newOutcome.getOutcomename())!=null) {
+        Outcome outcome = outcomeService.findByName(newOutcome.getOutcomename());
+        if(outcome!=null&&outcome.getOutcomeid()!= newOutcome.getOutcomeid()) {
             return ResultUtil.fail("项目结果已存在");
         }
         outcomeService.updateById(newOutcome);

@@ -85,7 +85,8 @@ public class OfficespaceController {
         if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
         //重复约束，检查是否已有场地
-        if(officespaceService.findByName(newOfficespace.getSpacename())!=null) {
+        Officespace officespace = officespaceService.findByName(newOfficespace.getSpacename());
+        if(officespace!=null&&officespace.getSpaceid()!= newOfficespace.getSpaceid()) {
             return ResultUtil.fail("该场地已存在");
         }
         officespaceService.save(newOfficespace);
@@ -101,7 +102,8 @@ public class OfficespaceController {
         if(newOfficespace.getLabid()!=null&&researchlabService.getById(newOfficespace.getLabid())==null)
             return ResultUtil.fail("研究室不存在！");
         //重复约束，检查是否已有场地
-        if(officespaceService.findByName(newOfficespace.getSpacename())!=null) {
+        Officespace officespace = officespaceService.findByName(newOfficespace.getSpacename());
+        if(officespace!=null&&officespace.getSpaceid()!= newOfficespace.getSpaceid()) {
             return ResultUtil.fail("该场地已存在");
         }
         officespaceService.updateById(newOfficespace);
@@ -113,6 +115,7 @@ public class OfficespaceController {
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
         officespaceService.removeById(id);
+
         return ResultUtil.success("删除场地成功");
     }
 

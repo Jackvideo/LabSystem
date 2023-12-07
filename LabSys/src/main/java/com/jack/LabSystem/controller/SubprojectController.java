@@ -1,6 +1,7 @@
 package com.jack.LabSystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Subproject;
 import com.jack.LabSystem.util.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,12 @@ public class SubprojectController {
     private SubprojectService subprojectService;
 
     //根据id查询
-    @GetMapping("/getid={id}")
-    public ResultUtil findOne(@PathVariable Integer id) {
-        return ResultUtil.success(subprojectService.getById(id));
+    @GetMapping("/getpid={pid}sid={sid}")
+    public ResultUtil findOne(@PathVariable("pid") Integer pid,@PathVariable("sid") Integer sid) {
+        QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
+        wrapper.eq("Projectid",pid);
+        wrapper.eq("Subprojectid",sid);
+        return ResultUtil.success(subprojectService.getOne(wrapper));
     }
 
     //查询全部
@@ -67,6 +71,11 @@ public class SubprojectController {
     public ResultUtil addSubproject(@RequestBody Subproject newSubproject){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
+        QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
+        wrapper.eq("Projectid",newSubproject.getProjectid());
+        wrapper.eq("Subprojectid",newSubproject.getSubprojectid());
+        if(subprojectService.getById(newSubproject.getSubprojectid())!=null)
+            return ResultUtil.fail("子项目已存在");
         subprojectService.save(newSubproject);
         return ResultUtil.success("新增子项目成功");
     }
@@ -75,15 +84,23 @@ public class SubprojectController {
     public ResultUtil updateSubproject(@RequestBody Subproject newSubproject){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
+        QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
+        wrapper.eq("projectid",newSubproject.getProjectid());
+        wrapper.eq("subprojectid",newSubproject.getSubprojectid());
+        if(subprojectService.getById(newSubproject.getSubprojectid())!=null)
+            return ResultUtil.fail("子项目已存在");
         subprojectService.updateById(newSubproject);
         return ResultUtil.success("修改子项目成功");
     }
     //直接物理删除
-    @DeleteMapping("/deleteid={id}")
-    public ResultUtil deleteSubproject(@PathVariable("id") Integer id){
+    @DeleteMapping("/deletepid={pid}sid={sid}")
+    public ResultUtil deleteSubproject(@PathVariable("pid") Integer pid,@PathVariable("sid") Integer sid){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
-        subprojectService.removeById(id);
+        QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
+        wrapper.eq("Projectid",pid);
+        wrapper.eq("Subprojectid",sid);
+        subprojectService.remove(wrapper);
         return ResultUtil.success("删除子项目成功");
     }
 

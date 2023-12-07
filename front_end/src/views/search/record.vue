@@ -104,9 +104,11 @@ export default {
             total: 0,
             record: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 10,
+                addOrUpdate: 0
             },
             recordList: [],
+            addOrUpdate: 0
         }
     },
     methods: {
@@ -128,8 +130,9 @@ export default {
         },
         openEdit(projectid, researcherid) {
             //打开对话框
-            if (projectid == null && researcherid == null)
+            if (projectid == null && researcherid == null) {
                 this.title = "新增参与记录";
+            }
             else {
                 this.title = "修改记录信息";
                 //查询数据

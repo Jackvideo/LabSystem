@@ -4,7 +4,8 @@
         <el-card id="search">
             <el-row>
                 新增子项目
-                <el-button @click="openEdit(null)" type="primary" icon="el-icon-plus" circle></el-button>
+                <el-button @click="openEdit(subproject.projectid, null)" type="primary" icon="el-icon-plus"
+                    circle></el-button>
             </el-row>
         </el-card>
 
@@ -30,8 +31,8 @@
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template v-slot="scope">
-                        <el-button @click="openEdit(scope.row.subprojectid)" type="primary" icon="el-icon-edit"
-                            circle></el-button>
+                        <el-button @click="openEdit(subproject.projectid, scope.row.subprojectid)" type="primary"
+                            icon="el-icon-edit" circle></el-button>
                         <el-button @click="deleteSubprojectorNot(scope.row)" type="danger" icon="el-icon-delete"
                             circle></el-button>
 
@@ -49,8 +50,11 @@
         <!-- 新增对象对话框 -->
         <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="subprojectForm" ref="subprojectFormRef" :rules="rules">
-                <el-form-item label="项目ID" prop="projectid" :label-width="formLabelWidth">
+                <el-form-item label="父项目ID" prop="projectid" :label-width="formLabelWidth">
                     <el-input v-model="subprojectForm.projectid" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="子项目ID" prop="subprojectid" :label-width="formLabelWidth">
+                    <el-input v-model="subprojectForm.subprojectid" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="负责人ID" prop="leadid" :label-width="formLabelWidth">
                     <el-input v-model="subprojectForm.leaderid" autocomplete="off"></el-input>
@@ -87,9 +91,6 @@ export default {
             subprojectForm: {},
             //表单验证规则
             rules: {
-                projectid: [
-                    { required: true, message: '请输入父项目ID', trigger: 'blur' },
-                ],
                 leaderid: [
                     { required: true, message: '请输入负责人ID', trigger: 'blur' },
                 ]
@@ -117,6 +118,7 @@ export default {
         },
         getSubprojectList() {
             // 按参数获取结果
+            this.subproject.projectid = this.theprojectid;
             CommonApi.getSubprojectList(this.subproject).then(response => {
                 this.subprojectList = response.data.rows;
                 this.total = response.data.total;
@@ -126,14 +128,14 @@ export default {
             this.subproject.projectid = id;
             this.getSubprojectList();
         },
-        openEdit(id) {
+        openEdit(pid, sid) {
             //打开对话框
-            if (id == null)
+            if (sid == null)
                 this.title = "新增子项目";
             else {
                 this.title = "修改子项目信息";
                 //查询数据
-                CommonApi.findOneSubproject(id).then(response => {
+                CommonApi.findOneSubproject(pid, sid).then(response => {
                     this.subprojectForm = response.data;
                 });
 
@@ -173,7 +175,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                CommonApi.deleteSubproject(Subproject.subprojectid).then(response => {
+                CommonApi.deleteSubproject(Subproject.projectid, Subproject.subprojectid).then(response => {
                     this.$message({
                         type: 'success',
                         message: '删除成功!'

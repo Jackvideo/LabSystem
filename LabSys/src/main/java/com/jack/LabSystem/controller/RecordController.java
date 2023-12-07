@@ -92,8 +92,7 @@ public class RecordController {
         if(researcherService.getById(recorder.getResearcherid())==null||projectService.getById(recorder.getProjectid())==null)
             return  ResultUtil.fail("信息不存在！违反外键约束");
         QueryWrapper<Record> wrapper=new QueryWrapper<>();
-        wrapper.eq("projectid",recorder.getProjectid());
-        wrapper.eq("researcherid",recorder.getResearcherid());
+        wrapper.eq("recordid",recorder.getRecordid());
         recordService.update(recorder,wrapper);
         return ResultUtil.success("修改工作记录成功");
     }

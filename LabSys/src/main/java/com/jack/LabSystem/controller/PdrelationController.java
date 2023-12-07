@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jack.LabSystem.model.entity.Department;
 import com.jack.LabSystem.model.entity.Project;
+import com.jack.LabSystem.service.PdrelationService;
 import com.jack.LabSystem.service.ProjectService;
 import com.jack.LabSystem.service.DepartmentService;
 import com.jack.LabSystem.util.Authority;
@@ -11,8 +12,6 @@ import com.jack.LabSystem.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
-
-import com.jack.LabSystem.service.PdrelationService;
 import com.jack.LabSystem.model.entity.Pdrelation;
 
 import java.util.HashMap;
@@ -42,7 +41,9 @@ public class PdrelationController {
     //根据id查询
     @GetMapping("/getid={id}")
     public ResultUtil findOne(@PathVariable("id") Integer id) {
-        return ResultUtil.success(pdrelationService.getById(id));
+        QueryWrapper<Pdrelation> wrapper=new QueryWrapper<>();
+        wrapper.eq("recordid",id);
+        return ResultUtil.success(pdrelationService.getOne(wrapper));
     }
 
     //查询全部
@@ -57,7 +58,7 @@ public class PdrelationController {
         if(Authority.getAuthority()<1)
             return ResultUtil.fail("用户权限不足");
         LambdaQueryWrapper<Pdrelation> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(pid!=null ,Pdrelation::getPartner,pid);
+        wrapper.eq(pid!=null ,Pdrelation::getProjectid,pid);
         wrapper.eq(name!=null&&name!="",Pdrelation::getProjectname,name);
         wrapper.eq(partner!=null&&partner!="",Pdrelation::getPartner,partner);
         wrapper.eq(principle!=null&&principle!="",Pdrelation::getPrinciple,principle);
@@ -91,7 +92,9 @@ public class PdrelationController {
         String principle=newRelation.getPrinciple();
         String qualifier= newRelation.getQualifier();
         //允许空，但如果非空，则必须判断外键约束
-        if((partner!=null&&departmentService.getOne(partnerwrapper)==null)||(principle!=null&&departmentService.getOne(principlewrapper)==null)||(qualifier!=null&&departmentService.getOne(qualifierwrapper)==null))
+        if((partner!=null&&partner!=""&&departmentService.getOne(partnerwrapper)==null)||
+                (principle!=null&&principle!=""&&departmentService.getOne(principlewrapper)==null)||
+                (qualifier!=null&&qualifier!=""&&departmentService.getOne(qualifierwrapper)==null))
             return ResultUtil.fail("单位信息错误！");
         pdrelationService.save(newRelation);
         return ResultUtil.success("新增联系关系成功");
@@ -118,14 +121,22 @@ public class PdrelationController {
         String principle=newRelation.getPrinciple();
         String qualifier= newRelation.getQualifier();
         //允许空，但如果非空，则必须判断外键约束
-        if((partner!=null&&departmentService.getOne(partnerwrapper)==null)||(principle!=null&&departmentService.getOne(principlewrapper)==null)||(qualifier!=null&&departmentService.getOne(qualifierwrapper)==null))
+        if((partner!=null&&departmentService.getOne(partnerwrapper)==null)||
+                (principle!=null&&departmentService.getOne(principlewrapper)==null)||
+                (qualifier!=null&&departmentService.getOne(qualifierwrapper)==null))
             return ResultUtil.fail("单位信息错误！");
         //监测方和委托方的唯一性约束
-        if(principle!=null&&pdrelationService.hasPrinciple(newRelation.getProjectid())==true)
+        int pid=newRelation.getProjectid();
+        int rid=newRelation.getRecordid();
+        int hasprinciple=pdrelationService.hasPrinciple(pid);
+        int hasqualifier=pdrelationService.hasQualifier(pid);
+        if(principle!=null&&hasprinciple!=-1&&!pdrelationService.getById(hasprinciple).getPrinciple().equals(principle))
             return ResultUtil.fail("该项目已存在唯一委托方");
-        if(qualifier!=null&&pdrelationService.hasQualifier(newRelation.getProjectid())==true)
+        if(qualifier!=null&&hasqualifier!=-1&&!pdrelationService.getById(hasqualifier).getQualifier().equals(qualifier))
             return ResultUtil.fail("该项目已存在唯一监测方");
-        pdrelationService.updateById(pdrelationService.getById(newRelation.getProjectid()));
+        QueryWrapper<Pdrelation> wrapper=new QueryWrapper<>();
+        wrapper.eq("recordid",newRelation.getRecordid());
+        pdrelationService.update(newRelation,wrapper);
         return ResultUtil.success("修改联系关系成功");
     }
     //直接物理删除
@@ -133,7 +144,9 @@ public class PdrelationController {
     public ResultUtil deleteContactrelation(@PathVariable("id") Integer id){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
-        pdrelationService.removeById(id);
+        QueryWrapper<Pdrelation> wrapper=new QueryWrapper<>();
+        wrapper.eq("recordid",id);
+        pdrelationService.remove(wrapper);
         return ResultUtil.success("删除联系关系成功");
     }
 }
