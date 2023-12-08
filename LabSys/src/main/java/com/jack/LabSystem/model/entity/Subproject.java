@@ -24,11 +24,13 @@ import lombok.EqualsAndHashCode;
 @TableName("subproject")
 public class Subproject implements Serializable {
 
+        @TableField("Recordid")
+        private Integer recordid;
 
 @TableField("Projectid")
 private Integer projectid;
 
-@TableId(value = "Subprojectid",type = IdType.AUTO)
+@TableField("Subprojectid")
 private Integer subprojectid;
 
 @TableField("Leaderid")

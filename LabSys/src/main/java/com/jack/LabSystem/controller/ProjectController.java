@@ -89,7 +89,8 @@ public class ProjectController {
         if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
             return ResultUtil.fail("负责人不存在！");
         //重复约束
-        if(projectService.findByName(newProject.getProjectname())==null) {
+        Project project=projectService.findByName(newProject.getProjectname());
+        if(project!=null&&project.getProjectid()!=newProject.getProjectid()) {
             return ResultUtil.fail("该项目已存在");
         }
             projectService.save(newProject);
@@ -105,7 +106,8 @@ public class ProjectController {
         if(newProject.getLeaderid()!=null&&leaderService.getById(newProject.getLeaderid())==null)
             return ResultUtil.fail("负责人不存在！");
         //重复约束
-        if(projectService.findByName(newProject.getProjectname())!=null) {
+        Project project=projectService.findByName(newProject.getProjectname());
+        if(project!=null&&project.getProjectid()!=newProject.getProjectid()) {
             return ResultUtil.fail("该项目已存在");
         }
         projectService.updateById(newProject);

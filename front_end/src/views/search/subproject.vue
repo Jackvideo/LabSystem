@@ -48,7 +48,7 @@
         </el-pagination>
 
         <!-- 新增对象对话框 -->
-        <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
+        <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible" append-to-body>
             <el-form :model="subprojectForm" ref="subprojectFormRef" :rules="rules">
                 <el-form-item label="父项目ID" prop="projectid" :label-width="formLabelWidth">
                     <el-input v-model="subprojectForm.projectid" autocomplete="off"></el-input>
@@ -88,7 +88,9 @@ export default {
         return {
             title: "",
             formLabelWidth: '150px',
-            subprojectForm: {},
+            subprojectForm: {
+                projectid: this.theprojectid
+            },
             //表单验证规则
             rules: {
                 leaderid: [

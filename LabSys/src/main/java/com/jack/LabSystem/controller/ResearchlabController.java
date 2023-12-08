@@ -73,17 +73,24 @@ public class ResearchlabController {
     public ResultUtil addLab(@RequestBody Researchlab newlab){
          if(Authority.getAuthority()<2)
              return ResultUtil.fail("用户权限不足");
-        if(researchlabService.findByName(newlab.getLabname())==null) {
-            researchlabService.save(newlab);
-            return ResultUtil.success("新增研究室成功");
-        }else
+         //唯一性约束
+         Researchlab lab=researchlabService.findByName(newlab.getLabname());
+        if(lab!=null&&lab.getLabid()!=newlab.getLabid()) {
             return ResultUtil.fail("研究室已存在");
+        }
+        researchlabService.save(newlab);
+         return ResultUtil.success("新增研究室成功");
+
      }
      //修改接口
     @PutMapping("/update")
     public ResultUtil updateLab(@RequestBody Researchlab newlab){
         if(Authority.getAuthority()<2)
             return ResultUtil.fail("用户权限不足");
+        //唯一性约束
+        Researchlab lab=researchlabService.findByName(newlab.getLabname());
+        if(lab!=null&&lab.getLabid()!=newlab.getLabid())
+            return ResultUtil.fail("研究室已存在");
         researchlabService.updateById(newlab);
         return ResultUtil.success("修改研究室成功");
     }

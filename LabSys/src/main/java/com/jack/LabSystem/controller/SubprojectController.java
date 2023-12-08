@@ -74,7 +74,8 @@ public class SubprojectController {
         QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
         wrapper.eq("Projectid",newSubproject.getProjectid());
         wrapper.eq("Subprojectid",newSubproject.getSubprojectid());
-        if(subprojectService.getById(newSubproject.getSubprojectid())!=null)
+        Subproject subproject=subprojectService.getOne(wrapper);
+        if(subproject!=null&&subproject.getRecordid()!= newSubproject.getRecordid())
             return ResultUtil.fail("子项目已存在");
         subprojectService.save(newSubproject);
         return ResultUtil.success("新增子项目成功");
@@ -87,9 +88,12 @@ public class SubprojectController {
         QueryWrapper<Subproject> wrapper=new QueryWrapper<>();
         wrapper.eq("projectid",newSubproject.getProjectid());
         wrapper.eq("subprojectid",newSubproject.getSubprojectid());
-        if(subprojectService.getById(newSubproject.getSubprojectid())!=null)
+        Subproject subproject=subprojectService.getOne(wrapper);
+        if(subproject!=null&&subproject.getRecordid()!= newSubproject.getRecordid())
             return ResultUtil.fail("子项目已存在");
-        subprojectService.updateById(newSubproject);
+        QueryWrapper<Subproject> wrapper2=new QueryWrapper<>();
+        wrapper2.eq("recordid",newSubproject.getRecordid());
+        subprojectService.update(newSubproject,wrapper2);
         return ResultUtil.success("修改子项目成功");
     }
     //直接物理删除

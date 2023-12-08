@@ -93,7 +93,7 @@
         <!-- 子项目对话框 -->
         <el-dialog title="子项目" :visible.sync="spVisible" width="80%">
             <!-- 引入子组件 -->
-            <Subproject :theprojectid='pid'></Subproject>
+            <Subproject :theprojectid="theprojectid"></Subproject>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="spVisible = false">取 消</el-button>
                 <el-button type="primary" @click="spVisible = false">确 定</el-button>
@@ -130,7 +130,7 @@ export default {
                     { required: true, message: '请输入项目经费', trigger: 'blur' },
                 ]
             },
-            pid: 1,
+            theprojectid: 1,
             dialogFormVisible: false,
             spVisible: false,
             total: 0,
@@ -175,7 +175,7 @@ export default {
         openSubEdit(id) {
             //打开子项目对话框
             //查询数据
-            this.pid = id;
+            this.theprojectid = id;
             this.spVisible = true;
         },
         clearForm() {

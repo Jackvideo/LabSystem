@@ -109,6 +109,10 @@ export default {
                 ]
             },
             options: [{
+                value: '专利',
+                label: '专利'
+            },
+            {
                 value: '发明专利',
                 label: '发明专利'
             },

@@ -80,7 +80,7 @@ public class ContactrelationController {
         contactwrapper.eq("contactid",newRelation.getContactid());
         if(departmentService.getOne(departmentwrapper)==null||contactService.getOne(contactwrapper)==null)
         {
-            return ResultUtil.fail("联系关系不存在！");
+            return ResultUtil.fail("单位或联系人不存在！");
         }
         contactrelationService.save(newRelation);
         return ResultUtil.success("新增联系关系成功");

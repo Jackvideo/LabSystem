@@ -520,6 +520,7 @@ export default {
             params: {
                 pageNo: subproject.pageNo,
                 pageSize: subproject.pageSize,
+                recordid: subproject.recordid,
                 projectid: subproject.projectid,
                 subprojectid: subproject.subprojectid,
                 leaderid: subproject.leaderid,
@@ -547,7 +548,7 @@ export default {
     },
     //逻辑判断是新增还是修改
     saveSubproject(subproject) {
-        if (subproject.projectid == null) {
+        if (subproject.recordid == null) {
             return this.addSubproject(subproject);
         } else {
             return this.updateSubproject(subproject);
